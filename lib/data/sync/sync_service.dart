@@ -255,10 +255,11 @@ class SyncService extends ChangeNotifier {
     final items = await _queue.pending();
     if (items.isEmpty) return;
 
-    // Photo memories are held back until their image file is uploaded: the
-    // uploader gives us the mediaUrl, which is written back into the queued
-    // payload so the pushed record carries it for the receiving device.
-    // Failed uploads stay queued and are retried by the next sync tick.
+    // Media memories (photos, videos, voice recordings) are held back until
+    // their file is uploaded: the uploader gives us the mediaUrl, which is
+    // written back into the queued payload so the pushed record carries it
+    // for the receiving device. Failed uploads stay queued and are retried by
+    // the next sync tick.
     final queuedItems = <SyncQueueItem>[];
     final records = <CompanioRecord>[];
     for (final e in items) {

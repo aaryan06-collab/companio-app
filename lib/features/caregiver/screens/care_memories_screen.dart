@@ -19,6 +19,7 @@ import 'care_add_memory_screen.dart';
 const Map<MemoryKind, String> kMemoryKindEmoji = {
   MemoryKind.text: '📝',
   MemoryKind.photo: '🖼️',
+  MemoryKind.video: '🎬',
   MemoryKind.voice: '🎙️',
   MemoryKind.sound: '🔊',
   MemoryKind.place: '📍',
@@ -35,6 +36,7 @@ String memoryCategoryLabelKey(MemoryCategory c) => switch (c) {
 String memoryKindLabelKey(MemoryKind k) => switch (k) {
   MemoryKind.text => L10nKeys.careMemoryKindText,
   MemoryKind.photo => L10nKeys.careMemoryKindPhoto,
+  MemoryKind.video => L10nKeys.careMemoryKindVideo,
   MemoryKind.voice => L10nKeys.careMemoryKindVoice,
   MemoryKind.sound => L10nKeys.careMemoryKindSound,
   MemoryKind.place => L10nKeys.careMemoryKindPlace,

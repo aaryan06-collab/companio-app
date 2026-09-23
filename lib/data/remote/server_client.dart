@@ -528,11 +528,12 @@ class ServerClient {
     }
   }
 
-  // ── Media (caregiver photo memories) ───────────────────────────────────
-  /// Uploads the image file at [localPath] to the server. Returns the
-  /// server-relative media path (e.g. ``/media/<id>.png``) or null on any
-  /// failure (offline, rejected). The sync engine retries failed photos.
-  Future<String?> uploadMemoryPhoto({
+  // ── Media (caregiver memory uploads) ──────────────────────────────────
+  /// Uploads the media file at [localPath] (photo, video or voice recording)
+  /// to the server. Returns the server-relative media path (e.g.
+  /// ``/media/<id>.png``) or null on any failure (offline, rejected). The
+  /// sync engine retries failed uploads.
+  Future<String?> uploadMemoryMedia({
     required String localPath,
     required String token,
     required String deviceId,

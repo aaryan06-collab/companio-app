@@ -320,6 +320,13 @@ abstract final class L10nKeys {
   static const careUploadPhoto = 'careUploadPhoto';
   static const careChoosePhoto = 'careChoosePhoto';
   static const careReplacePhoto = 'careReplacePhoto';
+  static const careUploadVideo = 'careUploadVideo';
+  static const careChooseVideo = 'careChooseVideo';
+  static const careReplaceVideo = 'careReplaceVideo';
+  static const careRecording = 'careRecording';
+  static const careMicPermission = 'careMicPermission';
+  static const careVoiceRecordingFailed = 'careVoiceRecordingFailed';
+  static const careMemoryKindVideo = 'careMemoryKindVideo';
   static const camera = 'camera';
   static const gallery = 'gallery';
   static const careRecordVoice = 'careRecordVoice';

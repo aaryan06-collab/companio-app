@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../app/providers.dart';
@@ -903,6 +904,7 @@ class _MemoryCard extends ConsumerWidget {
 
   Future<void> _openMemory(BuildContext context, WidgetRef ref) async {
     final attachments = _decodeBundle(memory.mediaPath);
+    final fallbackUrl = _mediaPlaybackUrl(ref, memory.mediaUrl) ?? '';
     await showDialog<void>(
       context: context,
       builder: (dialogContext) {
@@ -930,7 +932,7 @@ class _MemoryCard extends ConsumerWidget {
                   for (final attachment in attachments) ...[
                     _AttachmentViewer(
                       attachment: attachment,
-                      fallbackUrl: memory.mediaUrl ?? '',
+                      fallbackUrl: fallbackUrl,
                     ),
                     const SizedBox(height: AppSpacing.sm),
                   ],
@@ -999,6 +1001,27 @@ List<_MemoryAttachment> _decodeBundle(String? mediaPath) {
       path: mediaPath,
     ),
   ];
+}
+
+/// Builds an absolute playback URL for video/voice memories synced from the
+/// caregiver device. The server media route accepts the JWT as a ``token``
+/// query parameter (video/audio players cannot send authorisation headers),
+/// and already-absolute URLs are passed through unchanged. Returns null when
+/// the device is not linked to the server.
+String? _mediaPlaybackUrl(WidgetRef ref, String? mediaUrl) {
+  final url = mediaUrl;
+  if (url == null || url.isEmpty) return null;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  final client = ref.read(depsProvider).serverClient;
+  final session = ref.read(serverSessionProvider);
+  if (!client.enabled || session == null) return null;
+  final base = client.baseUrl.endsWith('/')
+      ? client.baseUrl.substring(0, client.baseUrl.length - 1)
+      : client.baseUrl;
+  final path = url.startsWith('/') ? url : '/$url';
+  return Uri.parse('$base$path')
+      .replace(queryParameters: {'token': session.token})
+      .toString();
 }
 
 String _classifyLegacyPath(String path) {
@@ -1090,32 +1113,9 @@ class _AttachmentViewer extends StatelessWidget {
           fallbackUrl: fallbackUrl,
         );
       case 'video':
-        return _VideoContent(path: attachment.path);
+        return _VideoContent(path: attachment.path, fallbackUrl: fallbackUrl);
       case 'voice':
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: AppColors.sageMist,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: const Row(
-            children: [
-              Icon(
-                Icons.mic_rounded,
-                size: 32,
-                color: AppColors.deepGreen,
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Voice memory saved',
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ),
-            ],
-          ),
-        );
+        return _VoicePlayer(path: attachment.path, fallbackUrl: fallbackUrl);
       default:
         return const SizedBox.shrink();
     }
@@ -1181,9 +1181,10 @@ class _ImageContent extends StatelessWidget {
 }
 
 class _VideoContent extends StatefulWidget {
-  const _VideoContent({required this.path});
+  const _VideoContent({required this.path, this.fallbackUrl = ''});
 
   final String path;
+  final String fallbackUrl;
 
   @override
   State<_VideoContent> createState() => _VideoContentState();
@@ -1201,9 +1202,21 @@ class _VideoContentState extends State<_VideoContent> {
 
   Future<void> _initVideo() async {
     try {
-      final controller = widget.path.startsWith('data:video/')
-          ? VideoPlayerController.networkUrl(Uri.parse(widget.path))
-          : VideoPlayerController.file(File(widget.path));
+      VideoPlayerController controller;
+      final serverUrl = widget.fallbackUrl;
+      if (widget.path.startsWith('data:video/')) {
+        controller = VideoPlayerController.networkUrl(
+          Uri.parse(widget.path),
+        );
+      } else if (File(widget.path).existsSync()) {
+        controller = VideoPlayerController.file(File(widget.path));
+      } else if (serverUrl.isNotEmpty) {
+        controller = VideoPlayerController.networkUrl(
+          Uri.parse(serverUrl),
+        );
+      } else {
+        throw StateError('no video source');
+      }
 
       await controller.initialize();
       if (!mounted) {
@@ -1288,5 +1301,135 @@ class _BrokenMedia extends StatelessWidget {
         color: AppColors.deepGreen,
       ),
     );
+  }
+}
+
+/// Plays a voice memory. Prefers the local file, falls back to the server
+/// ``mediaUrl`` (which carries the JWT as a ``token`` query), and shows a
+/// broken-media card when no source is playable.
+class _VoicePlayer extends StatefulWidget {
+  const _VoicePlayer({required this.path, this.fallbackUrl = ''});
+
+  final String path;
+  final String fallbackUrl;
+
+  @override
+  State<_VoicePlayer> createState() => _VoicePlayerState();
+}
+
+class _VoicePlayerState extends State<_VoicePlayer> {
+  final AudioPlayer _player = AudioPlayer();
+  Object? _error;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      if (widget.path.startsWith('data:audio/')) {
+        setState(() {
+          _loading = false;
+          _error = true;
+        });
+        return;
+      }
+      final source = File(widget.path).existsSync()
+          ? AudioSource.file(widget.path)
+          : widget.fallbackUrl.isNotEmpty
+              ? AudioSource.uri(Uri.parse(widget.fallbackUrl))
+              : throw StateError('no voice source');
+      await _player.setAudioSource(source);
+      if (mounted) setState(() => _loading = false);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _error = e;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return const SizedBox(
+        height: 80,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (_error != null) {
+      return const _BrokenMedia(icon: Icons.mic_rounded);
+    }
+
+    return StreamBuilder<PlayerState>(
+      stream: _player.playerStateStream,
+      builder: (context, state) {
+        final playing = state.data?.playing ?? false;
+        return Container(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          decoration: BoxDecoration(
+            color: AppColors.sageMist,
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: Row(
+            children: [
+              StreamBuilder<Duration>(
+                stream: _player.positionStream,
+                builder: (context, snapshot) {
+                  final position = snapshot.data ?? Duration.zero;
+                  final duration = _player.duration ?? Duration.zero;
+                  final total = duration.inMilliseconds > 0
+                      ? duration.inSeconds
+                      : 0;
+                  return Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          total > 0
+                              ? '${_fmt(position)} / ${_fmt(duration)}'
+                              : _fmt(position),
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 4),
+                        LinearProgressIndicator(
+                          value: total > 0 ? position.inSeconds / total : 0,
+                          backgroundColor: AppColors.creamCard,
+                          minHeight: 6,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(width: 12),
+              IconButton.filled(
+                onPressed: playing ? _player.pause : _player.play,
+                icon: Icon(
+                  playing ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  static String _fmt(Duration d) {
+    final m = d.inMinutes.toString().padLeft(2, '0');
+    final s = (d.inSeconds % 60).toString().padLeft(2, '0');
+    return '$m:$s';
   }
 }

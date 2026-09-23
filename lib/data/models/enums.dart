@@ -74,6 +74,7 @@ enum AttemptMethod { call, sms }
 
 enum MemoryKind {
   photo,
+  video,
   voice,
   text,
   sound,
