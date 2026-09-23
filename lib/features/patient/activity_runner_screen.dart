@@ -195,47 +195,228 @@ class _ActivityRunnerState extends ConsumerState<ActivityRunnerScreen> {
     );
   }
 
+  List<String> _tutorialSteps(AppLocalizations l10n) => switch (_type) {
+        ActivityType.pairs => [
+            l10n.t('tutPairs1'),
+            l10n.t('tutPairs2'),
+            l10n.t('tutPairs3'),
+            l10n.t('tutNoFail'),
+          ],
+        ActivityType.sequenceRecall => [
+            l10n.t('tutSeq1'),
+            l10n.t('tutSeq2'),
+            l10n.t('tutSeq3'),
+            l10n.t('tutNoFail'),
+          ],
+        ActivityType.recall => [
+            l10n.t('tutRecall1'),
+            l10n.t('tutRecall2'),
+            l10n.t('tutRecall3'),
+            l10n.t('tutNoFail'),
+          ],
+        ActivityType.matching => [
+            l10n.t('tutMatch1'),
+            l10n.t('tutMatch2'),
+            l10n.t('tutMatch3'),
+            l10n.t('tutNoFail'),
+          ],
+        _ => const [],
+      };
+
+  Future<void> _speakTutorial(AppLocalizations l10n) async {
+    final lines = [l10n.t('careGameHowToPlay'), ..._tutorialSteps(l10n)];
+    await _speak(lines.where((l) => l.isNotEmpty).join('. '));
+  }
+
+  Widget _tutorialPreview() {
+    switch (_type) {
+      case ActivityType.pairs:
+        final sample = _pairsDeck.take(4).toList();
+        return Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          alignment: WrapAlignment.center,
+          children: [
+            for (final v in sample)
+              _MemoryTile(
+                text: v,
+                imagePath: content.images[v],
+                shown: true,
+              ),
+          ],
+        );
+      case ActivityType.sequenceRecall:
+        final sample = _seqPool.take(3).toList();
+        return Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < sample.length; i++)
+              _MemoryTile(
+                text: sample[i],
+                shown: true,
+                selected: i == 1,
+              ),
+          ],
+        );
+      case ActivityType.recall:
+        final sample = shuffledVariants.take(3).toList();
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final v in sample)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                child: _ChoiceTile(
+                  label: v,
+                  selected: false,
+                  correct: false,
+                  onTap: null,
+                ),
+              ),
+          ],
+        );
+      case ActivityType.matching:
+        if (content.pairs.isEmpty) return const SizedBox.shrink();
+        final rightSample = shuffledRight.take(3).toList();
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _MemoryTile(text: content.pairs.first.left, shown: true),
+            const SizedBox(height: AppSpacing.sm),
+            for (final r in rightSample)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                child: _ChoiceTile(
+                  label: r,
+                  selected: false,
+                  correct: false,
+                  onTap: null,
+                ),
+              ),
+          ],
+        );
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  void _beginGame(AppLocalizations l10n) {
+    setState(() => _phase = _Phase.playing);
+    switch (_type) {
+      case ActivityType.pairs:
+        _pairsStartMemorising();
+      case ActivityType.sequenceRecall:
+        _seqStartRound(0);
+      case ActivityType.findChanged:
+        _changeStartRound(0);
+      default:
+        break;
+    }
+    _speak(_prompt(l10n));
+  }
+
   Widget _buildIntro(AppLocalizations l10n) {
-    return Padding(
+    final steps = _tutorialSteps(l10n);
+    if (steps.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(content.promptEmoji, style: const TextStyle(fontSize: 72)),
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              l10n.t(widget.activity.titleKey),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              l10n.t(widget.activity.subtitleKey ?? ''),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge
+                  ?.copyWith(color: AppColors.inkSoft),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            AppPrimaryButton(
+              label: l10n.t('activityNext'),
+              icon: Icons.play_arrow_rounded,
+              onPressed: () => _beginGame(l10n),
+            ),
+          ],
+        ),
+      );
+    }
+    return ListView(
       padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(content.promptEmoji, style: const TextStyle(fontSize: 72)),
-          const SizedBox(height: AppSpacing.lg),
-          Text(
-            l10n.t(widget.activity.titleKey),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineMedium,
+      children: [
+        const SizedBox(height: AppSpacing.sm),
+        Center(
+          child: Text(content.promptEmoji, style: const TextStyle(fontSize: 64)),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(
+          l10n.t(widget.activity.titleKey),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          l10n.t(widget.activity.subtitleKey ?? ''),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyLarge
+              ?.copyWith(color: AppColors.inkSoft),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        SectionCard(
+          color: AppColors.sageMist,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.t('careGameHowToPlay'),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  IconButton.filledTonal(
+                    onPressed: () => _speakTutorial(l10n),
+                    tooltip: l10n.t('tutListen'),
+                    icon: const Icon(
+                      Icons.volume_up_rounded,
+                      color: AppColors.deepGreen,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              for (var i = 0; i < steps.length; i++)
+                _TutorialStep(index: i + 1, text: steps[i]),
+              const SizedBox(height: AppSpacing.sm),
+              Center(
+                child: TextButton.icon(
+                  onPressed: () => _speakTutorial(l10n),
+                  icon: const Icon(Icons.volume_up_rounded, size: 20),
+                  label: Text(l10n.t('tutListen')),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            l10n.t(widget.activity.subtitleKey ?? ''),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge
-                ?.copyWith(color: AppColors.inkSoft),
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          AppPrimaryButton(
-            label: l10n.t('activityNext'),
-            icon: Icons.play_arrow_rounded,
-            onPressed: () {
-              setState(() => _phase = _Phase.playing);
-              switch (_type) {
-                case ActivityType.pairs:
-                  _pairsStartMemorising();
-                case ActivityType.sequenceRecall:
-                  _seqStartRound(0);
-                case ActivityType.findChanged:
-                  _changeStartRound(0);
-                default:
-                  break;
-              }
-              _speak(_prompt(l10n));
-            },
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        Center(child: _tutorialPreview()),
+        const SizedBox(height: AppSpacing.xl),
+        AppPrimaryButton(
+          label: l10n.t('activityNext'),
+          icon: Icons.play_arrow_rounded,
+          onPressed: () => _beginGame(l10n),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+      ],
     );
   }
 
@@ -515,6 +696,7 @@ class _ActivityRunnerState extends ConsumerState<ActivityRunnerScreen> {
             for (var i = 0; i < _pairsDeck.length; i++)
               _MemoryTile(
                 text: _pairsDeck[i],
+                imagePath: content.images[_pairsDeck[i]],
                 shown:
                     _pairsMemorising ||
                     _pairsMatched.contains(i) ||
@@ -972,6 +1154,7 @@ class _ChoiceTile extends StatelessWidget {
 class _MemoryTile extends StatelessWidget {
   const _MemoryTile({
     required this.text,
+    this.imagePath,
     this.onTap,
     this.shown = true,
     this.matched = false,
@@ -979,6 +1162,7 @@ class _MemoryTile extends StatelessWidget {
   });
 
   final String text;
+  final String? imagePath;
   final VoidCallback? onTap;
   final bool shown;
   final bool matched;
@@ -1006,13 +1190,72 @@ class _MemoryTile extends StatelessWidget {
           border: Border.all(color: border, width: width),
         ),
         alignment: Alignment.center,
-        child: Text(
-          shown ? text : '❓',
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: shown ? 28 : 42),
-        ),
+        clipBehavior: Clip.antiAlias,
+        child: shown
+            ? (imagePath != null && imagePath!.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(AppRadii.md),
+                    child: Image.asset(
+                      imagePath!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Text(
+                            text,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 28),
+                          ),
+                    ),
+                  )
+                : Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 28),
+                  ))
+            : const Text('❓', style: TextStyle(fontSize: 42)),
+      ),
+    );
+  }
+}
+
+class _TutorialStep extends StatelessWidget {
+  const _TutorialStep({required this.index, required this.text});
+
+  final int index;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 26,
+            height: 26,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.deepGreen,
+            ),
+            child: Text(
+              '$index',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
+          ),
+        ],
       ),
     );
   }

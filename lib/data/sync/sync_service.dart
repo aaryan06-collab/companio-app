@@ -170,13 +170,15 @@ class SyncService extends ChangeNotifier {
     Duration retryInterval = const Duration(seconds: 45),
     Future<String?> Function(String localPath)? mediaUploader,
     Future<void> Function(String memoryId, String url)? onMemoryUploaded,
+    Future<void> Function()? onPullComplete,
   }) : _api = api,
        _queue = queue,
        _applier = applier,
        _monitor = monitor,
        _retryInterval = retryInterval,
        _mediaUploader = mediaUploader,
-       _onMediaUploaded = onMemoryUploaded;
+       _onMediaUploaded = onMemoryUploaded,
+       onPullComplete = onPullComplete;
 
   final CompanioApi _api;
   final SyncRepository _queue;
@@ -185,6 +187,9 @@ class SyncService extends ChangeNotifier {
   final Duration _retryInterval;
   final Future<String?> Function(String localPath)? _mediaUploader;
   final Future<void> Function(String memoryId, String url)? _onMediaUploaded;
+
+  /// Invoked after a successful downstream pull so UI providers can refresh.
+  Future<void> Function()? onPullComplete;
 
   SyncSnapshot _snapshot = const SyncSnapshot();
   SyncSnapshot get snapshot => _snapshot;
@@ -333,6 +338,7 @@ class SyncService extends ChangeNotifier {
     }
     final pending = await _queue.pendingCount();
     _snapshot = _snapshot.copyWith(pending: pending);
+    await onPullComplete?.call();
   }
 
   Future<void> enqueueAndCommit({

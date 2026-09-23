@@ -79,6 +79,7 @@ class ActivityContent {
     this.hint,
     this.correctLabel,
     this.promptEmoji = '',
+    this.images = const {},
   });
 
   /// Main question / instruction.
@@ -110,6 +111,11 @@ class ActivityContent {
 
   final String promptEmoji;
 
+  /// Optional asset image per variant (variant label -> asset path). When a
+  /// variant has an entry here the game engine renders the picture instead of
+  /// the emoji/text label; matching still happens on [variants].
+  final Map<String, String> images;
+
   Map<String, dynamic> toJson() => {
     'prompt': prompt,
     'variants': variants,
@@ -121,6 +127,7 @@ class ActivityContent {
     'hint': hint,
     'correctLabel': correctLabel,
     'promptEmoji': promptEmoji,
+    'images': images,
   };
 
   factory ActivityContent.fromJson(Map<String, dynamic> json) =>
@@ -140,6 +147,8 @@ class ActivityContent {
         hint: json['hint'] as String?,
         correctLabel: json['correctLabel'] as String?,
         promptEmoji: (json['promptEmoji'] as String?) ?? '',
+        images: ((json['images'] as Map?) ?? const {})
+            .map((k, v) => MapEntry(k as String, v as String)),
       );
 }
 
@@ -187,7 +196,15 @@ ActivityContent mergeActivityContent(
   promptEmoji: override.promptEmoji.isNotEmpty
       ? override.promptEmoji
       : base.promptEmoji,
+  images: mergeStringMap(base.images, override.images),
 );
+
+/// Field-level merge for [ActivityContent.images]: entries from [override]
+/// win, everything else falls back to [base].
+Map<String, String> mergeStringMap(
+  Map<String, String> base,
+  Map<String, String> override,
+) => {...base, ...override};
 
 /// Maps an activity id to its translated content for one language.
 typedef ActivityExtras = Map<String, ActivityContent>;

@@ -45,6 +45,12 @@ class SessionNotifier extends AsyncNotifier<AppSession?> {
     await _deps.init();
     _deps.reminderScheduler.start();
     _deps.syncService.startAutoSync();
+    _deps.syncService.onPullComplete = () async {
+      ref.invalidate(remindersProvider);
+      ref.invalidate(homeDataProvider);
+      ref.invalidate(gardenProvider);
+      ref.invalidate(pendingSyncCountProvider);
+    };
     _deps.voiceService.init(language: 'hi-IN', enabled: false);
     final user = await _users.latestUser();
     if (user == null) return null;

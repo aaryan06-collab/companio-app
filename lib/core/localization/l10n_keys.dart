@@ -118,6 +118,21 @@ abstract final class L10nKeys {
   static const activityTapToMatch = 'activityTapToMatch';
   static const activityNext = 'activityNext';
   static const activityFinish = 'activityFinish';
+  // How-to-play tutorial shown before a game starts.
+  static const tutListen = 'tutListen';
+  static const tutPairs1 = 'tutPairs1';
+  static const tutPairs2 = 'tutPairs2';
+  static const tutPairs3 = 'tutPairs3';
+  static const tutSeq1 = 'tutSeq1';
+  static const tutSeq2 = 'tutSeq2';
+  static const tutSeq3 = 'tutSeq3';
+  static const tutRecall1 = 'tutRecall1';
+  static const tutRecall2 = 'tutRecall2';
+  static const tutRecall3 = 'tutRecall3';
+  static const tutMatch1 = 'tutMatch1';
+  static const tutMatch2 = 'tutMatch2';
+  static const tutMatch3 = 'tutMatch3';
+  static const tutNoFail = 'tutNoFail';
   static const activityGroupLetsAgain = 'activityGroupLetsAgain';
   static const activityGroupTogether = 'activityGroupTogether';
   static const activityGreatJob = 'activityGreatJob';
@@ -468,6 +483,84 @@ abstract final class L10nKeys {
   static const regionChoose = 'regionChoose';
   static const noVoice = 'noVoice';
   static const optional = 'optional';
+
+  // Common patient actions / labels
+  static const settings = 'settings';
+  static const stop = 'stop';
+  static const deleteAction = 'deleteAction';
+  static const sosShort = 'sosShort';
+
+  // Routines (patient home)
+  static const routineAddTitle = 'routineAddTitle';
+  static const routineAddBody = 'routineAddBody';
+  static const timeLabel = 'timeLabel';
+  static const routineNameLabel = 'routineNameLabel';
+  static const routineNameHint = 'routineNameHint';
+  static const routineKind = 'routineKind';
+  static const medicineKind = 'medicineKind';
+  static const waterKind = 'waterKind';
+  static const addRoutine = 'addRoutine';
+  static const homeRoutineSubtitle = 'homeRoutineSubtitle';
+  static const routineCheckTitle = 'routineCheckTitle';
+  static const routineCheckBody = 'routineCheckBody';
+  static const addFirstRoutine = 'addFirstRoutine';
+  static const deleteRoutineTitle = 'deleteRoutineTitle';
+  static const deleteRoutineBody = 'deleteRoutineBody';
+  static const deleteRoutineTooltip = 'deleteRoutineTooltip';
+
+  // Memory composer (patient)
+  static const profileMissing = 'profileMissing';
+  static const memoriesSubtitle = 'memoriesSubtitle';
+  static const memoryComposeHint = 'memoryComposeHint';
+  static const createMemory = 'createMemory';
+  static const addToMemory = 'addToMemory';
+  static const memoryTitleLabel = 'memoryTitleLabel';
+  static const memoryTitleHint = 'memoryTitleHint';
+  static const memoryCaptionLabel = 'memoryCaptionLabel';
+  static const memoryCaptionHint = 'memoryCaptionHint';
+  static const memoriesKindVideo = 'memoriesKindVideo';
+  static const voiceShort = 'voiceShort';
+  static const textShort = 'textShort';
+  static const categoryLabel = 'categoryLabel';
+  static const saveMemory = 'saveMemory';
+  static const memoryTitleRequired = 'memoryTitleRequired';
+  static const stopVoiceFirst = 'stopVoiceFirst';
+  static const memorySaved = 'memorySaved';
+  static const addMemoryTooltip = 'addMemoryTooltip';
+  static const photoAddFailed = 'photoAddFailed';
+  static const videoAddFailed = 'videoAddFailed';
+  static const voiceSaveFailed = 'voiceSaveFailed';
+  static const micVoicePermission = 'micVoicePermission';
+  static const recordingStartFailed = 'recordingStartFailed';
+  static const savedMemoriesTitle = 'savedMemoriesTitle';
+  static const attachmentsAddedOne = 'attachmentsAddedOne';
+  static const attachmentsAddedMany = 'attachmentsAddedMany';
+
+  // Caregiver achievements
+  static const careAchieveFirstSteps = 'careAchieveFirstSteps';
+  static const careAchieveFirstStepsBody = 'careAchieveFirstStepsBody';
+  static const careAchieveSevenDay = 'careAchieveSevenDay';
+  static const careAchieveSevenDayBody = 'careAchieveSevenDayBody';
+  static const careAchieveGarden = 'careAchieveGarden';
+  static const careAchieveGardenBody = 'careAchieveGardenBody';
+  static const careAchievePerfect = 'careAchievePerfect';
+  static const careAchievePerfectBody = 'careAchievePerfectBody';
+  static const careAchieveEngagement = 'careAchieveEngagement';
+  static const careAchieveEngagementBody = 'careAchieveEngagementBody';
+
+  // Month abbreviations (charts / notes)
+  static const monthJan = 'monthJan';
+  static const monthFeb = 'monthFeb';
+  static const monthMar = 'monthMar';
+  static const monthApr = 'monthApr';
+  static const monthMay = 'monthMay';
+  static const monthJun = 'monthJun';
+  static const monthJul = 'monthJul';
+  static const monthAug = 'monthAug';
+  static const monthSep = 'monthSep';
+  static const monthOct = 'monthOct';
+  static const monthNov = 'monthNov';
+  static const monthDec = 'monthDec';
 
   // Language picker
   static const langChoose = 'langChoose';

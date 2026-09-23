@@ -13,6 +13,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../app/providers.dart';
 import '../../core/localization/app_localizations.dart';
+import '../../core/localization/l10n_keys.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../data/local/app_database.dart';
@@ -109,13 +110,14 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
     required MemoryCategory category,
     required List<_MemoryAttachment> attachments,
   }) async {
+    final l10n = AppLocalizations.of(context);
     final patientId = ref.read(patientIdProvider);
 
     if (patientId == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No patient profile found. Please sign in again.'),
+        SnackBar(
+          content: Text(l10n.t(L10nKeys.profileMissing)),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -155,6 +157,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
     void Function(void Function()) setSheet,
     List<_MemoryAttachment> attachments,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final image = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 85,
@@ -176,8 +179,8 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
       debugPrint('Photo selection error: $e');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not add this photo. Please try again.'),
+        SnackBar(
+          content: Text(l10n.t(L10nKeys.photoAddFailed)),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -188,6 +191,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
     void Function(void Function()) setSheet,
     List<_MemoryAttachment> attachments,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final video = await ImagePicker().pickVideo(
       source: ImageSource.gallery,
     );
@@ -208,8 +212,8 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
       debugPrint('Video selection error: $e');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not add this video. Please try again.'),
+        SnackBar(
+          content: Text(l10n.t(L10nKeys.videoAddFailed)),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -224,6 +228,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
     void Function(void Function()) setSheet,
     List<_MemoryAttachment> attachments,
   ) async {
+    final l10n = AppLocalizations.of(context);
     if (_isRecording) {
       try {
         final path = await _audioRecorder.stop();
@@ -253,8 +258,8 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
         setState(() => _isRecording = false);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not save the voice recording.'),
+          SnackBar(
+            content: Text(l10n.t(L10nKeys.voiceSaveFailed)),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -266,8 +271,8 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
     if (!hasPermission) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Microphone permission is needed for a voice memory.'),
+        SnackBar(
+          content: Text(l10n.t(L10nKeys.micVoicePermission)),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -296,8 +301,8 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
       debugPrint('Voice recording start error: $e');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not start recording. Please try again.'),
+        SnackBar(
+          content: Text(l10n.t(L10nKeys.recordingStartFailed)),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -309,6 +314,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
   // ============================================================
 
   Future<void> _addMemory() async {
+    final l10n = AppLocalizations.of(context);
     final title = TextEditingController();
     final caption = TextEditingController();
     final attachments = <_MemoryAttachment>[];
@@ -336,7 +342,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Create a Memory',
+                          l10n.t(L10nKeys.createMemory),
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
@@ -348,7 +354,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                   ),
 
                   Text(
-                    'Add a title, some text, and as many photos, videos or voice notes as you want.',
+                    l10n.t(L10nKeys.memoryComposeHint),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.inkSoft,
                         ),
@@ -360,8 +366,8 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                     controller: title,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
-                      labelText: 'Memory title',
-                      hintText: 'e.g. My daughter\'s wedding',
+                      labelText: l10n.t(L10nKeys.memoryTitleLabel),
+                      hintText: l10n.t(L10nKeys.memoryTitleHint),
                       prefixIcon: const Icon(Icons.title_rounded),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadii.sm),
@@ -376,8 +382,8 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                     maxLines: 4,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
-                      labelText: 'Write something about this memory',
-                      hintText: 'What happened? Who was there? How did it feel?',
+                      labelText: l10n.t(L10nKeys.memoryCaptionLabel),
+                      hintText: l10n.t(L10nKeys.memoryCaptionHint),
                       prefixIcon: const Padding(
                         padding: EdgeInsets.only(bottom: 55),
                         child: Icon(Icons.edit_note_rounded),
@@ -391,7 +397,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                   const SizedBox(height: AppSpacing.md),
 
                   Text(
-                    'Add to this memory',
+                    l10n.t(L10nKeys.addToMemory),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColors.deepGreen,
@@ -405,7 +411,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                       Expanded(
                         child: _ComposerOption(
                           icon: Icons.photo_camera_rounded,
-                          label: 'Photo',
+                          label: l10n.t(L10nKeys.memoriesKindPhoto),
                           onTap: () => _pickPhoto(setSheet, attachments),
                         ),
                       ),
@@ -413,7 +419,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                       Expanded(
                         child: _ComposerOption(
                           icon: Icons.videocam_rounded,
-                          label: 'Video',
+                          label: l10n.t(L10nKeys.memoriesKindVideo),
                           onTap: () => _pickVideo(setSheet, attachments),
                         ),
                       ),
@@ -423,7 +429,9 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                           icon: _isRecording
                               ? Icons.stop_rounded
                               : Icons.mic_rounded,
-                          label: _isRecording ? 'Stop' : 'Voice',
+                          label: _isRecording
+                              ? l10n.t(L10nKeys.stop)
+                              : l10n.t(L10nKeys.voiceShort),
                           active: _isRecording,
                           onTap: () =>
                               _toggleComposerVoice(setSheet, attachments),
@@ -435,7 +443,12 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                   if (attachments.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.md),
                     Text(
-                      '${attachments.length} attachment${attachments.length == 1 ? '' : 's'} added',
+                      attachments.length == 1
+                          ? l10n.t(L10nKeys.attachmentsAddedOne)
+                          : l10n.t(
+                              L10nKeys.attachmentsAddedMany,
+                              {'count': '${attachments.length}'},
+                            ),
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             color: AppColors.deepGreen,
                             fontWeight: FontWeight.w700,
@@ -460,7 +473,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                   const SizedBox(height: AppSpacing.md),
 
                   Text(
-                    'Category',
+                    l10n.t(L10nKeys.categoryLabel),
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(height: AppSpacing.xs),
@@ -470,7 +483,10 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                     children: [
                       for (final category in MemoryCategory.values)
                         ChoiceChip(
-                          label: Text(_categoryLabel(category)),
+                          label: Text(
+                            '${_categoryEmoji(category)} '
+                            '${l10n.t(_categoryKey(category))}',
+                          ),
                           selected: chosen == category,
                           onSelected: (_) =>
                               setSheet(() => chosen = category),
@@ -481,13 +497,13 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                   const SizedBox(height: AppSpacing.lg),
 
                   AppPrimaryButton(
-                    label: 'Save Memory',
+                    label: l10n.t(L10nKeys.saveMemory),
                     icon: Icons.bookmark_add_rounded,
                     onPressed: () async {
                       if (title.text.trim().isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please give this memory a title.'),
+                          SnackBar(
+                            content: Text(l10n.t(L10nKeys.memoryTitleRequired)),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -496,8 +512,8 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
 
                       if (_isRecording) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Stop the voice recording first.'),
+                          SnackBar(
+                            content: Text(l10n.t(L10nKeys.stopVoiceFirst)),
                             behavior: SnackBarBehavior.floating,
                           ),
                         );
@@ -529,20 +545,28 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
 
     if (saved == true && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Memory saved 💙'),
+        SnackBar(
+          content: Text(l10n.t(L10nKeys.memorySaved)),
           behavior: SnackBarBehavior.floating,
         ),
       );
     }
   }
 
-  String _categoryLabel(MemoryCategory category) => switch (category) {
-        MemoryCategory.family => '👨‍👩‍👧‍👦 Family',
-        MemoryCategory.childhood => '🧒 Childhood',
-        MemoryCategory.places => '🏔️ Places',
-        MemoryCategory.festivals => '🪔 Festivals',
-        MemoryCategory.important => '⭐ Important',
+  String _categoryEmoji(MemoryCategory category) => switch (category) {
+        MemoryCategory.family => '👨‍👩‍👧‍👦',
+        MemoryCategory.childhood => '🧒',
+        MemoryCategory.places => '🏔️',
+        MemoryCategory.festivals => '🪔',
+        MemoryCategory.important => '⭐',
+      };
+
+  String _categoryKey(MemoryCategory category) => switch (category) {
+        MemoryCategory.family => L10nKeys.careMemoryCategoryFamily,
+        MemoryCategory.childhood => L10nKeys.careMemoryCategoryChildhood,
+        MemoryCategory.places => L10nKeys.careMemoryCategoryPlaces,
+        MemoryCategory.festivals => L10nKeys.careMemoryCategoryFestivals,
+        MemoryCategory.important => L10nKeys.careMemoryCategoryImportant,
       };
 
   @override
@@ -584,7 +608,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'My Memories',
+                            l10n.t(L10nKeys.memoriesTitle),
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge
@@ -595,7 +619,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                           ),
                           const SizedBox(height: AppSpacing.xs),
                           Text(
-                            'Keep your favourite moments close.',
+                            l10n.t(L10nKeys.memoriesSubtitle),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -607,7 +631,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                     IconButton.filled(
                       onPressed: _addMemory,
                       icon: const Icon(Icons.add_rounded),
-                      tooltip: 'Add a memory',
+                      tooltip: l10n.t(L10nKeys.addMemoryTooltip),
                     ),
                   ],
                 ),
@@ -648,7 +672,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Create a Memory',
+                                  l10n.t(L10nKeys.createMemory),
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium
@@ -659,7 +683,10 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                                 ),
                                 const SizedBox(height: 3),
                                 Text(
-                                  'Photo • Video • Voice • Text',
+                                  '${l10n.t(L10nKeys.memoriesKindPhoto)} • '
+                                  '${l10n.t(L10nKeys.memoriesKindVideo)} • '
+                                  '${l10n.t(L10nKeys.voiceShort)} • '
+                                  '${l10n.t(L10nKeys.textShort)}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
@@ -681,7 +708,7 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                 const SizedBox(height: AppSpacing.xl),
 
                 Text(
-                  'Saved Memories',
+                  l10n.t(L10nKeys.savedMemoriesTitle),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: AppColors.deepGreen,
                         fontWeight: FontWeight.w700,
@@ -692,11 +719,10 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
                 if (list.isEmpty)
                   EmptyState(
                     emoji: '🌸',
-                    title: 'No memories yet',
-                    body:
-                        'Create one memory and add photos, videos, voice or text to it.',
+                    title: l10n.t(L10nKeys.memoriesEmpty),
+                    body: l10n.t(L10nKeys.memoriesEmptyBody),
                     action: AppPrimaryButton(
-                      label: 'Create a Memory',
+                      label: l10n.t(L10nKeys.createMemory),
                       icon: Icons.add_rounded,
                       onPressed: _addMemory,
                     ),
@@ -775,11 +801,12 @@ class _AttachmentChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final data = switch (attachment.type) {
-      'photo' => (Icons.photo_rounded, 'Photo'),
-      'video' => (Icons.videocam_rounded, 'Video'),
-      'voice' => (Icons.mic_rounded, 'Voice'),
-      _ => (Icons.attach_file_rounded, 'File'),
+      'photo' => (Icons.photo_rounded, l10n.t(L10nKeys.memoriesKindPhoto)),
+      'video' => (Icons.videocam_rounded, l10n.t(L10nKeys.memoriesKindVideo)),
+      'voice' => (Icons.mic_rounded, l10n.t(L10nKeys.voiceShort)),
+      _ => (Icons.attach_file_rounded, l10n.t(L10nKeys.memoriesKindText)),
     };
 
     return Container(
@@ -903,6 +930,7 @@ class _MemoryCard extends ConsumerWidget {
   }
 
   Future<void> _openMemory(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final attachments = _decodeBundle(memory.mediaPath);
     final fallbackUrl = _mediaPlaybackUrl(ref, memory.mediaUrl) ?? '';
     await showDialog<void>(
@@ -948,7 +976,7 @@ class _MemoryCard extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Close'),
+              child: Text(l10n.t(L10nKeys.close)),
             ),
             TextButton.icon(
               onPressed: () async {
@@ -964,7 +992,7 @@ class _MemoryCard extends ConsumerWidget {
                 }
               },
               icon: const Icon(Icons.delete_outline_rounded),
-              label: const Text('Remove'),
+              label: Text(l10n.t(L10nKeys.remove)),
             ),
           ],
         );

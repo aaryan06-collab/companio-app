@@ -704,7 +704,32 @@ class _ReminderSection extends ConsumerWidget {
               ),
             ],
           ),
-          if (reminders.value?.isEmpty ?? true)
+          if (reminders.hasError)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.error_outline_rounded,
+                    color: AppColors.terracotta,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      l10n.t('errorGenericBody'),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.ink,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => ref.invalidate(remindersProvider),
+                    child: Text(l10n.t('retry')),
+                  ),
+                ],
+              ),
+            )
+          else if (reminders.value?.isEmpty ?? true)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
               child: Text(

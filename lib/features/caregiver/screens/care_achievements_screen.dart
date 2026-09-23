@@ -103,6 +103,28 @@ class _AchievementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    final titleKey = switch (achievement.id) {
+      'firstSteps' => L10nKeys.careAchieveFirstSteps,
+      'sevenDay' => L10nKeys.careAchieveSevenDay,
+      'garden' => L10nKeys.careAchieveGarden,
+      'perfect' => L10nKeys.careAchievePerfect,
+      'engagement' => L10nKeys.careAchieveEngagement,
+      _ => '',
+    };
+    final bodyKey = switch (achievement.id) {
+      'firstSteps' => L10nKeys.careAchieveFirstStepsBody,
+      'sevenDay' => L10nKeys.careAchieveSevenDayBody,
+      'garden' => L10nKeys.careAchieveGardenBody,
+      'perfect' => L10nKeys.careAchievePerfectBody,
+      'engagement' => L10nKeys.careAchieveEngagementBody,
+      _ => '',
+    };
+    final title =
+        titleKey.isEmpty ? achievement.title : l10n.t(titleKey);
+    final subtitle =
+        bodyKey.isEmpty ? achievement.subtitle : l10n.t(bodyKey);
+
     return CareCard(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Row(
@@ -131,16 +153,16 @@ class _AchievementCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  achievement.title,
+                  title,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontFamily: CareTheme.serif,
                     color: muted ? CareColors.textSoft : CareColors.text,
                   ),
                 ),
-                if (achievement.subtitle.isNotEmpty) ...[
+                if (subtitle.isNotEmpty) ...[
                   const SizedBox(height: 2),
                   Text(
-                    achievement.subtitle,
+                    subtitle,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: CareColors.textSoft,
                     ),

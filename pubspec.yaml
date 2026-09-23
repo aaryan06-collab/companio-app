@@ -39,6 +39,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/logo.png
+    - assets/images/pairs/
   fonts:
     - family: NotoSerif
       fonts:

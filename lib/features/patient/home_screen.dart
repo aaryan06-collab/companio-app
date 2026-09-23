@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/providers.dart';
 import '../../core/localization/app_localizations.dart';
+import '../../core/localization/l10n_keys.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/utilities/greeting.dart';
+import '../../core/utilities/routine_done_store.dart';
 import '../../data/local/app_database.dart';
 import '../../data/models/enums.dart';
 import '../../domain/services/cognitive_screen_service.dart';
@@ -27,11 +29,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final Set<String> _completedRoutines = <String>{};
 
   @override
+  void initState() {
+    super.initState();
+    _loadCompletedRoutines();
+  }
+
+  Future<void> _loadCompletedRoutines() async {
+    final stored = await RoutineDoneStore.load();
+    if (!mounted) return;
+    setState(() => _completedRoutines.addAll(stored));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final home = ref.watch(homeDataProvider);
     final pending = ref.watch(pendingSyncCountProvider).value ?? 0;
-    final reminders = ref.watch(remindersProvider).value ?? const <Reminder>[];
+    final remindersAsync = ref.watch(remindersProvider);
+    final reminders = remindersAsync.value ?? const <Reminder>[];
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -67,6 +82,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onSettings: () => PatientTabController.of(context)?.value = 4,
                 ),
                 const SizedBox(height: AppSpacing.lg),
+                if (remindersAsync.hasError) ...[
+                  SectionCard(
+                    color: AppColors.roseSoft,
+                    borderColor: AppColors.terracotta,
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.error_outline_rounded,
+                          color: AppColors.terracotta,
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: Text(
+                            l10n.t(L10nKeys.errorGenericBody),
+                            style: const TextStyle(color: AppColors.ink),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => ref.invalidate(remindersProvider),
+                          child: Text(l10n.t(L10nKeys.retry)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                ],
                 _RoutineCheckCard(
                   reminders: reminders,
                   completed: _completedRoutines,
@@ -76,6 +117,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         _completedRoutines.remove(id);
                       }
                     });
+                    RoutineDoneStore.save(_completedRoutines);
                   },
                   onAdd: () => _addRoutine(context),
                   onDelete: (reminder) => _deleteRoutine(reminder),
@@ -126,6 +168,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _addRoutine(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     final patientId = ref.read(patientIdProvider);
     if (patientId == null) return;
 
@@ -168,7 +211,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       const SizedBox(height: 18),
                       Text(
-                        'Add a routine',
+                        l10n.t(L10nKeys.routineAddTitle),
                         style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(
                               color: AppColors.deepGreenDark,
@@ -177,7 +220,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Create a simple reminder for your day.',
+                        l10n.t(L10nKeys.routineAddBody),
                         style: Theme.of(context).textTheme.bodyMedium
                             ?.copyWith(color: AppColors.inkSoft),
                       ),
@@ -186,8 +229,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         controller: titleController,
                         textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
-                          labelText: 'Routine name',
-                          hintText: 'e.g. Drink water',
+                          labelText: l10n.t(L10nKeys.routineNameLabel),
+                          hintText: l10n.t(L10nKeys.routineNameHint),
                           filled: true,
                           fillColor: AppColors.cream,
                           prefixIcon: const Icon(Icons.edit_note_rounded),
@@ -225,9 +268,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 color: AppColors.deepGreen,
                               ),
                               const SizedBox(width: 12),
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  'Time',
+                                  l10n.t(L10nKeys.timeLabel),
                                   style: TextStyle(fontWeight: FontWeight.w700),
                                 ),
                               ),
@@ -247,19 +290,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         spacing: 8,
                         children: [
                           _RoutineTypeChip(
-                            label: 'Routine',
+                            label: l10n.t(L10nKeys.routineKind),
                             icon: Icons.check_circle_outline_rounded,
                             selected: kind == 'routine',
                             onTap: () => setSheetState(() => kind = 'routine'),
                           ),
                           _RoutineTypeChip(
-                            label: 'Medicine',
+                            label: l10n.t(L10nKeys.medicineKind),
                             icon: Icons.medication_outlined,
                             selected: kind == 'medicine',
                             onTap: () => setSheetState(() => kind = 'medicine'),
                           ),
                           _RoutineTypeChip(
-                            label: 'Water',
+                            label: l10n.t(L10nKeys.waterKind),
                             icon: Icons.water_drop_outlined,
                             selected: kind == 'water',
                             onTap: () => setSheetState(() => kind = 'water'),
@@ -270,7 +313,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: AppPrimaryButton(
-                          label: 'Add routine',
+                          label: l10n.t(L10nKeys.addRoutine),
                           icon: Icons.add_rounded,
                           onPressed: () async {
                             final title = titleController.text.trim();
@@ -309,24 +352,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _deleteRoutine(Reminder reminder) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.creamCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text('Delete routine?'),
-        content: Text('Remove “${reminder.title}” from your routine?'),
+        title: Text(l10n.t(L10nKeys.deleteRoutineTitle)),
+        content: Text(
+          l10n.t(L10nKeys.deleteRoutineBody, {'title': reminder.title}),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(l10n.t(L10nKeys.cancel)),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.terracotta,
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            child: Text(l10n.t(L10nKeys.deleteAction)),
           ),
         ],
       ),
@@ -336,6 +382,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     await ref.read(depsProvider).reminderRepository.deleteReminder(reminder.id);
     setState(() => _completedRoutines.remove(reminder.id));
+    RoutineDoneStore.save(_completedRoutines);
     ref.invalidate(remindersProvider);
   }
 }
@@ -418,7 +465,7 @@ class _GreetingHero extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'A calm little plan for your day.',
+                  l10n.t(L10nKeys.homeRoutineSubtitle),
                   style: Theme.of(context).textTheme.bodyMedium
                       ?.copyWith(color: AppColors.inkSoft),
                 ),
@@ -450,7 +497,7 @@ class _GreetingHero extends StatelessWidget {
                   shape: const CircleBorder(),
                   child: IconButton(
                     onPressed: onSettings,
-                    tooltip: 'Settings',
+                    tooltip: l10n.t(L10nKeys.settings),
                     icon: const Icon(Icons.settings_outlined),
                     color: AppColors.deepGreenDark,
                     iconSize: 22,
@@ -485,6 +532,7 @@ class _RoutineCheckCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final sorted = [...reminders]
       ..sort((a, b) {
         final aMinutes = a.hour * 60 + a.minute;
@@ -524,22 +572,25 @@ class _RoutineCheckCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Routine check',
-                      style: TextStyle(
+                      l10n.t(L10nKeys.routineCheckTitle),
+                      style: const TextStyle(
                         color: AppColors.deepGreenDark,
                         fontSize: 19,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
-                      'Small steps for a good day',
-                      style: TextStyle(color: AppColors.inkSoft, fontSize: 13),
+                      l10n.t(L10nKeys.routineCheckBody),
+                      style: const TextStyle(
+                        color: AppColors.inkSoft,
+                        fontSize: 13,
+                      ),
                     ),
                   ],
                 ),
@@ -547,7 +598,7 @@ class _RoutineCheckCard extends StatelessWidget {
               TextButton.icon(
                 onPressed: onAdd,
                 icon: const Icon(Icons.add_rounded, size: 20),
-                label: const Text('Add'),
+                label: Text(l10n.t(L10nKeys.add)),
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.deepGreen,
                   textStyle: const TextStyle(fontWeight: FontWeight.w800),
@@ -568,17 +619,17 @@ class _RoutineCheckCard extends StatelessWidget {
                   color: AppColors.sageMist.withValues(alpha: .55),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.add_circle_outline_rounded,
                       color: AppColors.deepGreen,
                       size: 30,
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
-                      'Add your first routine',
-                      style: TextStyle(
+                      l10n.t(L10nKeys.addFirstRoutine),
+                      style: const TextStyle(
                         color: AppColors.deepGreen,
                         fontWeight: FontWeight.w800,
                       ),
@@ -617,6 +668,7 @@ class _RoutineRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final icon = switch (reminder.kind) {
       'medicine' => Icons.medication_outlined,
       'water' => Icons.water_drop_outlined,
@@ -686,7 +738,7 @@ class _RoutineRow extends StatelessWidget {
             ),
             IconButton(
               onPressed: onDelete,
-              tooltip: 'Delete routine',
+              tooltip: l10n.t(L10nKeys.deleteRoutineTooltip),
               icon: const Icon(Icons.delete_outline_rounded),
               color: AppColors.terracotta,
             ),

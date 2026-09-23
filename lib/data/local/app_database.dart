@@ -390,7 +390,7 @@ class AppDatabase extends _$AppDatabase {
       AppDatabase(await exec.openTestExecutor());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -413,6 +413,10 @@ class AppDatabase extends _$AppDatabase {
         await m.addColumn(patientProfiles, patientProfiles.dateOfBirth);
         await m.createTable(dailyNotes);
         await m.createTable(caregiverSettings);
+      }
+      if (from < 5) {
+        await m.createTable(reminders);
+        await m.createTable(notifications);
       }
     },
   );

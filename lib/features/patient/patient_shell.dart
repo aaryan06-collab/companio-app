@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/localization/app_localizations.dart';
+import '../../core/localization/l10n_keys.dart';
 import '../../core/theme/app_colors.dart';
 import '../sos/sos_screen.dart';
 import 'activities_screen.dart';
@@ -107,7 +108,7 @@ class _ShellBodyState extends ConsumerState<_ShellBody> {
                     MaterialPageRoute<void>(builder: (_) => const SosScreen()),
                   ),
                   icon: const Icon(Icons.support_agent_rounded),
-                  label: const Text('SOS'),
+                  label: Text(l10n.t(L10nKeys.sosShort)),
                 )
               : null,
         ),

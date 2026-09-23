@@ -189,7 +189,7 @@ class _NoteCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final ts = note.createdAt;
-    final dateLabel = '${ts.day} ${_monthAbbr(ts.month)}, ${ts.year}';
+    final dateLabel = '${ts.day} ${_monthAbbr(ts.month, l10n)}, ${ts.year}';
 
     return CareCard(
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -243,19 +243,19 @@ class _NoteCard extends StatelessWidget {
     );
   }
 
-  static String _monthAbbr(int m) => const [
-    '',
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ][m];
+  String _monthAbbr(int m, AppLocalizations l10n) => switch (m) {
+      1 => l10n.t(L10nKeys.monthJan),
+      2 => l10n.t(L10nKeys.monthFeb),
+      3 => l10n.t(L10nKeys.monthMar),
+      4 => l10n.t(L10nKeys.monthApr),
+      5 => l10n.t(L10nKeys.monthMay),
+      6 => l10n.t(L10nKeys.monthJun),
+      7 => l10n.t(L10nKeys.monthJul),
+      8 => l10n.t(L10nKeys.monthAug),
+      9 => l10n.t(L10nKeys.monthSep),
+      10 => l10n.t(L10nKeys.monthOct),
+      11 => l10n.t(L10nKeys.monthNov),
+      12 => l10n.t(L10nKeys.monthDec),
+      _ => '',
+    };
 }
