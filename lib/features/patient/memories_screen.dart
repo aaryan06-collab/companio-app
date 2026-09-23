@@ -18,6 +18,7 @@ import '../../data/local/app_database.dart';
 import '../../data/models/enums.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/app_cards.dart';
+import '../../shared/widgets/memory_media.dart';
 import '../../shared/widgets/splash_screen.dart';
 
 class MemoriesScreen extends ConsumerStatefulWidget {
@@ -99,72 +100,6 @@ class _MemoriesScreenState extends ConsumerState<MemoriesScreen> {
           },
       ],
     });
-  }
-
-  List<_MemoryAttachment> _decodeMemoryBundle(String? mediaPath) {
-    if (mediaPath == null || mediaPath.isEmpty) return [];
-
-    try {
-      final decoded = jsonDecode(mediaPath);
-      if (decoded is Map && decoded['companioMemory'] == 1) {
-        final raw = decoded['attachments'];
-        if (raw is List) {
-          return raw
-              .whereType<Map>()
-              .map(
-                (item) => _MemoryAttachment(
-                  type: item['type']?.toString() ?? 'file',
-                  path: item['path']?.toString() ?? '',
-                ),
-              )
-              .where((item) => item.path.isNotEmpty)
-              .toList();
-        }
-      }
-    } catch (_) {
-      // Older memories stored a single raw path/data URL.
-    }
-
-    final kind = mediaPath.startsWith('data:image/') ||
-            (!kIsWeb && _isImageFile(mediaPath))
-        ? 'photo'
-        : mediaPath.startsWith('data:video/') ||
-                (!kIsWeb && _isVideoFile(mediaPath))
-            ? 'video'
-            : mediaPath.startsWith('data:audio/') ||
-                    (!kIsWeb && _isAudioFile(mediaPath))
-                ? 'voice'
-                : 'file';
-
-    return [
-      _MemoryAttachment(type: kind, path: mediaPath),
-    ];
-  }
-
-  bool _isImageFile(String path) {
-    final lower = path.toLowerCase();
-    return lower.endsWith('.jpg') ||
-        lower.endsWith('.jpeg') ||
-        lower.endsWith('.png') ||
-        lower.endsWith('.webp') ||
-        lower.endsWith('.gif');
-  }
-
-  bool _isVideoFile(String path) {
-    final lower = path.toLowerCase();
-    return lower.endsWith('.mp4') ||
-        lower.endsWith('.mov') ||
-        lower.endsWith('.webm') ||
-        lower.endsWith('.mkv');
-  }
-
-  bool _isAudioFile(String path) {
-    final lower = path.toLowerCase();
-    return lower.endsWith('.m4a') ||
-        lower.endsWith('.mp3') ||
-        lower.endsWith('.wav') ||
-        lower.endsWith('.webm') ||
-        lower.endsWith('.ogg');
   }
 
   Future<void> _saveComposedMemory({
@@ -993,7 +928,10 @@ class _MemoryCard extends ConsumerWidget {
                     _TextMemoryContent(text: memory.caption!),
 
                   for (final attachment in attachments) ...[
-                    _AttachmentViewer(attachment: attachment),
+                    _AttachmentViewer(
+                      attachment: attachment,
+                      fallbackUrl: memory.mediaUrl ?? '',
+                    ),
                     const SizedBox(height: AppSpacing.sm),
                   ],
 
@@ -1057,77 +995,41 @@ List<_MemoryAttachment> _decodeBundle(String? mediaPath) {
 
   return [
     _MemoryAttachment(
-      type: mediaPath.startsWith('data:image/') ? 'photo' : 'file',
+      type: _classifyLegacyPath(mediaPath),
       path: mediaPath,
     ),
   ];
 }
 
-class _MemoryThumbnail extends StatelessWidget {
-  const _MemoryThumbnail({required this.attachments});
+String _classifyLegacyPath(String path) {
+  if (path.startsWith('data:image/')) return 'photo';
+  if (path.startsWith('data:video/')) return 'video';
+  if (path.startsWith('data:audio/')) return 'voice';
+  if (kIsWeb) return 'file';
 
-  final List<_MemoryAttachment> attachments;
-
-  @override
-  Widget build(BuildContext context) {
-    final photo = attachments.where((item) => item.type == 'photo').firstOrNull;
-
-    if (photo != null) {
-      return _ImageContent(path: photo.path, fill: true);
-    }
-
-    final video = attachments.where((item) => item.type == 'video').firstOrNull;
-    if (video != null) {
-      return _MediaIconBackground(
-        icon: Icons.videocam_rounded,
-        label: 'VIDEO',
-      );
-    }
-
-    final voice = attachments.where((item) => item.type == 'voice').firstOrNull;
-    if (voice != null) {
-      return _MediaIconBackground(
-        icon: Icons.mic_rounded,
-        label: 'VOICE',
-      );
-    }
-
-    return _MediaIconBackground(
-      icon: Icons.edit_note_rounded,
-      label: 'MEMORY',
-    );
+  final lower = path.toLowerCase();
+  if (lower.endsWith('.jpg') ||
+      lower.endsWith('.jpeg') ||
+      lower.endsWith('.png') ||
+      lower.endsWith('.webp') ||
+      lower.endsWith('.gif') ||
+      lower.endsWith('.heic') ||
+      lower.endsWith('.heif')) {
+    return 'photo';
   }
-}
-
-class _MediaIconBackground extends StatelessWidget {
-  const _MediaIconBackground({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.sageMist,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 48, color: AppColors.deepGreen),
-            const SizedBox(height: 7),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: AppColors.deepGreen,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1,
-                  ),
-            ),
-          ],
-        ),
-      ),
-    );
+  if (lower.endsWith('.mp4') ||
+      lower.endsWith('.mov') ||
+      lower.endsWith('.webm') ||
+      lower.endsWith('.mkv')) {
+    return 'video';
   }
+  if (lower.endsWith('.m4a') ||
+      lower.endsWith('.mp3') ||
+      lower.endsWith('.wav') ||
+      lower.endsWith('.ogg')) {
+    return 'voice';
+  }
+  return 'file';
 }
 
 class _MiniTypeIcon extends StatelessWidget {
@@ -1171,15 +1073,22 @@ class _TextMemoryContent extends StatelessWidget {
 }
 
 class _AttachmentViewer extends StatelessWidget {
-  const _AttachmentViewer({required this.attachment});
+  const _AttachmentViewer({
+    required this.attachment,
+    this.fallbackUrl = '',
+  });
 
   final _MemoryAttachment attachment;
+  final String fallbackUrl;
 
   @override
   Widget build(BuildContext context) {
     switch (attachment.type) {
       case 'photo':
-        return _ImageContent(path: attachment.path);
+        return _ImageContent(
+          path: attachment.path,
+          fallbackUrl: fallbackUrl,
+        );
       case 'video':
         return _VideoContent(path: attachment.path);
       case 'voice':
@@ -1214,10 +1123,13 @@ class _AttachmentViewer extends StatelessWidget {
 }
 
 class _ImageContent extends StatelessWidget {
-  const _ImageContent({required this.path, this.fill = false});
+  const _ImageContent({
+    required this.path,
+    this.fallbackUrl = '',
+  });
 
   final String path;
-  final bool fill;
+  final String fallbackUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -1231,11 +1143,22 @@ class _ImageContent extends StatelessWidget {
           bytes,
           fit: BoxFit.cover,
           width: double.infinity,
-          height: fill ? double.infinity : 240,
+          height: 240,
         );
       } catch (_) {
         image = const _BrokenMedia(icon: Icons.photo_rounded);
       }
+    } else if (fallbackUrl.isNotEmpty) {
+      image = SizedBox(
+        width: double.infinity,
+        height: 240,
+        child: MemoryMediaImage(
+          mediaPath: path,
+          mediaUrl: fallbackUrl,
+          fit: BoxFit.cover,
+          borderRadius: BorderRadius.circular(18),
+        ),
+      );
     } else if (!kIsWeb) {
       final file = File(path);
       image = file.existsSync()
@@ -1243,7 +1166,7 @@ class _ImageContent extends StatelessWidget {
               file,
               fit: BoxFit.cover,
               width: double.infinity,
-              height: fill ? double.infinity : 240,
+              height: 240,
             )
           : const _BrokenMedia(icon: Icons.photo_rounded);
     } else {

@@ -301,6 +301,10 @@ const Map<String, String> stringsHi = {
   L10nKeys.carePerformanceNote:
       'हाल में गतिविधि प्रदर्शन इस व्यक्ति के सामान्य स्तर से थोड़ा कम है।',
   L10nKeys.careUploadPhoto: 'तस्वीर जोड़ें',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'आवाज़ रिकॉर्ड करें',
   L10nKeys.careWriteMemory: 'याद लिखें',
   L10nKeys.careMemoryTitle: 'शीर्षक',

@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/l10n_keys.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/caregiver_theme.dart';
+import '../../../data/local/media_store.dart';
 import '../../../data/models/enums.dart';
 import '../providers/care_providers.dart';
 import '../widgets/care_ui.dart';
@@ -26,6 +30,7 @@ class _CareAddMemoryScreenState extends ConsumerState<CareAddMemoryScreen> {
   final _title = TextEditingController();
   final _caption = TextEditingController();
   Set<MemoryPlacement> _placements = {MemoryPlacement.garden};
+  File? _photo;
   bool _saving = false;
 
   @override
@@ -101,6 +106,55 @@ class _CareAddMemoryScreenState extends ConsumerState<CareAddMemoryScreen> {
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
+          if (_kind == MemoryKind.photo) ...[
+            _fieldLabel(l10n.t(L10nKeys.careUploadPhoto), theme),
+            if (_photo == null)
+              OutlinedButton.icon(
+                onPressed: _pickPhoto,
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(56),
+                  side: const BorderSide(color: CareColors.primary),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+                icon: const Icon(Icons.add_a_photo_rounded),
+                label: Text(
+                  l10n.t(L10nKeys.careChoosePhoto),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: CareColors.primary,
+                  ),
+                ),
+              )
+            else
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: AspectRatio(
+                  aspectRatio: 4 / 3,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.file(_photo!, fit: BoxFit.cover),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Row(
+                          children: [
+                            _smallRound(Icons.edit_rounded, () => _pickPhoto(),
+                                tooltip: l10n.t(L10nKeys.careReplacePhoto)),
+                            const SizedBox(width: 8),
+                            _smallRound(Icons.delete_rounded,
+                                () => setState(() => _photo = null),
+                                tooltip: l10n.t('remove')),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            const SizedBox(height: AppSpacing.lg),
+          ],
           _fieldLabel(l10n.t(L10nKeys.careMemoryPlacementLabel), theme),
           Wrap(
             spacing: 8,
@@ -142,6 +196,17 @@ class _CareAddMemoryScreenState extends ConsumerState<CareAddMemoryScreen> {
     child: Text(text, style: theme.textTheme.titleMedium),
   );
 
+  Widget _smallRound(IconData icon, VoidCallback onTap, {String? tooltip}) =>
+      Material(
+        color: Colors.black45,
+        shape: const CircleBorder(),
+        child: IconButton(
+          onPressed: onTap,
+          tooltip: tooltip,
+          icon: Icon(icon, color: Colors.white, size: 20),
+        ),
+      );
+
   InputDecoration _input(String hint, IconData? icon) => InputDecoration(
     hintText: hint,
     prefixIcon: icon != null ? Icon(icon, color: CareColors.textFaint) : null,
@@ -161,23 +226,96 @@ class _CareAddMemoryScreenState extends ConsumerState<CareAddMemoryScreen> {
     ),
   );
 
+  Future<void> _pickPhoto() async {
+    final l10n = AppLocalizations.of(context);
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      backgroundColor: CareColors.card,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: AppSpacing.sm),
+            ListTile(
+              leading: const Icon(Icons.photo_library_rounded),
+              title: Text(l10n.t(L10nKeys.gallery)),
+              onTap: () => Navigator.of(sheetContext).pop(ImageSource.gallery),
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt_rounded),
+              title: Text(l10n.t(L10nKeys.camera)),
+              onTap: () => Navigator.of(sheetContext).pop(ImageSource.camera),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+          ],
+        ),
+      ),
+    );
+    if (source == null) return;
+    final picked = await ImagePicker().pickImage(
+      source: source,
+      imageQuality: 85,
+    );
+    if (picked == null || !mounted) return;
+    setState(() => _photo = File(picked.path));
+  }
+
   Future<void> _save() async {
     setState(() => _saving = true);
+    final l10n = AppLocalizations.of(context);
     final deps = ref.read(depsProvider);
     final subject = await ref.read(careSubjectProvider.future);
+    final memoryId = newMemoryId();
+
+    String? mediaPath;
+    if (_kind == MemoryKind.photo) {
+      final photo = _photo;
+      if (photo == null) {
+        setState(() => _saving = false);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.t(L10nKeys.careChoosePhoto))),
+        );
+        return;
+      }
+      mediaPath = await MediaStore.copyToMediaStore(photo, memoryId);
+    }
+
     await deps.memoryRepository.addMemory(
-      id: newMemoryId(),
+      id: memoryId,
       patientId: subject.id,
       kind: _kind,
       title: _title.text.trim(),
       caption: _caption.text.trim().isEmpty ? null : _caption.text.trim(),
+      mediaPath: mediaPath,
       category: _category,
       createdBy: 'caregiver',
       placements: _placements.toList(),
     );
+
+    // Sync the new memory to a linked patient on another device (the photo
+    // file upload happens inside the sync engine, retrying while offline).
+    final session = ref.read(serverSessionProvider);
+    if (session != null && session.isCaregiver && session.hasPatient) {
+      await deps.syncService.enqueueAndCommit(
+        entityType: 'memory',
+        entityId: memoryId,
+        operation: SyncOperation.create,
+        payload: {
+          'patientId': subject.id,
+          'kind': _kind.name,
+          'title': _title.text.trim(),
+          'caption': _caption.text.trim().isEmpty ? null : _caption.text.trim(),
+          'mediaPath': mediaPath,
+          'mediaUrl': null,
+          'category': _category.name,
+          'createdBy': 'caregiver',
+        },
+      );
+    }
+
     ref.invalidate(careMemoriesProvider);
     if (!mounted) return;
-    final l10n = AppLocalizations.of(context);
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(l10n.t(L10nKeys.careMemorySaved))));

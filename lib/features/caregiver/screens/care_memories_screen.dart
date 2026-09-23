@@ -11,6 +11,7 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/caregiver_theme.dart';
 import '../../../data/local/app_database.dart';
 import '../../../data/models/enums.dart';
+import '../../../shared/widgets/memory_media.dart';
 import '../providers/care_providers.dart';
 import '../widgets/care_ui.dart';
 import 'care_add_memory_screen.dart';
@@ -221,6 +222,25 @@ class _MemoryCard extends StatelessWidget {
               ],
             ),
           ),
+          if (kind == MemoryKind.photo &&
+              ((memory.mediaUrl?.isNotEmpty ?? false) ||
+                  (memory.mediaPath?.isNotEmpty ?? false)))
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                0,
+                AppSpacing.lg,
+                AppSpacing.md,
+              ),
+              child: AspectRatio(
+                aspectRatio: 4 / 3,
+                child: MemoryMediaImage(
+                  mediaPath: memory.mediaPath,
+                  mediaUrl: memory.mediaUrl,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.only(
               left: AppSpacing.lg,

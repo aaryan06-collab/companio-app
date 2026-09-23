@@ -307,6 +307,10 @@ const Map<String, String> stringsEn = {
   L10nKeys.carePerformanceNote:
       'Activity performance is lower than this person\'s recent baseline.',
   L10nKeys.careUploadPhoto: 'Upload photo',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'Record voice',
   L10nKeys.careWriteMemory: 'Write memory',
   L10nKeys.careMemoryTitle: 'Title',

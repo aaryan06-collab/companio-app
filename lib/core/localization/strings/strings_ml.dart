@@ -307,6 +307,10 @@ const Map<String, String> stringsMl = {
   L10nKeys.carePerformanceNote:
       'ഈയിടെ ഈ വ്യക്തിയുടെ പ്രവർത്തന പ്രകടനം സാധാരണ നിലയേക്കാൾ അൽപ്പം കുറവാണ്.',
   L10nKeys.careUploadPhoto: 'ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'ശബ്ദം റെക്കോർഡ് ചെയ്യുക',
   L10nKeys.careWriteMemory: 'ഓർമ്മ എഴുതുക',
   L10nKeys.careMemoryTitle: 'തലക്കെട്ട്',

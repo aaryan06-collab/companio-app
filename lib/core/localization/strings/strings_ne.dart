@@ -305,6 +305,10 @@ const Map<String, String> stringsNe = {
   L10nKeys.carePerformanceNote:
       'हालै यस व्यक्तिको क्रियाकलाप क्षमता तिनको सामान्य स्तरभन्दा थोरै कम छ।',
   L10nKeys.careUploadPhoto: 'फोटो अपलोड गर्नुहोस्',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'आवाज रेकर्ड गर्नुहोस्',
   L10nKeys.careWriteMemory: 'सम्झना लेख्नुहोस्',
   L10nKeys.careMemoryTitle: 'शीर्षक',

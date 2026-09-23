@@ -304,6 +304,10 @@ const Map<String, String> stringsOr = {
   L10nKeys.carePerformanceNote:
       'ଏବେ ଏହି ବ୍ୟକ୍ତିଙ୍କ କାର୍ଯ୍ୟକଳାପ ପ୍ରଦର୍ଶନ ସାଧାରଣ ସ୍ତରଠାରୁ ଟିକିଏ କମ୍ ଅଛି।',
   L10nKeys.careUploadPhoto: 'ଫଟୋ ଅପଲୋଡ କରନ୍ତୁ',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'ସ୍ୱର ରେକର୍ଡ କରନ୍ତୁ',
   L10nKeys.careWriteMemory: 'ସ୍ମୃତି ଲେଖନ୍ତୁ',
   L10nKeys.careMemoryTitle: 'ଶୀର୍ଷକ',

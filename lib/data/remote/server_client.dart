@@ -528,6 +528,47 @@ class ServerClient {
     }
   }
 
+  // ── Media (caregiver photo memories) ───────────────────────────────────
+  /// Uploads the image file at [localPath] to the server. Returns the
+  /// server-relative media path (e.g. ``/media/<id>.png``) or null on any
+  /// failure (offline, rejected). The sync engine retries failed photos.
+  Future<String?> uploadMemoryPhoto({
+    required String localPath,
+    required String token,
+    required String deviceId,
+  }) async {
+    if (!enabled) return null;
+    try {
+      final request = http.MultipartRequest(
+        'POST',
+        _uri('/media/upload'),
+      )
+        ..headers['Authorization'] = 'Bearer $token'
+        ..fields['deviceId'] = deviceId
+        ..files.add(
+          await http.MultipartFile.fromPath('file', localPath),
+        );
+      final streamed = await request.send().timeout(_timeout);
+      final response = await http.Response.fromStream(streamed);
+      if (response.statusCode < 200 || response.statusCode >= 300) return null;
+      final body = jsonDecode(response.body);
+      if (body is Map<String, dynamic>) return body['url'] as String?;
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Turns a server-relative media path into an absolute URL the app can
+  /// load, preserving any already-absolute URL.
+  String resolveMediaUrl(String path) {
+    if (path.startsWith('http')) return path;
+    final base = _baseUrl.endsWith('/')
+        ? _baseUrl.substring(0, _baseUrl.length - 1)
+        : _baseUrl;
+    return Uri.parse('$base$path').toString();
+  }
+
   // ── Analytics ──────────────────────────────────────────────────────────
   Future<ServerAnalytics?> analyticsFor(
     String patientId, {

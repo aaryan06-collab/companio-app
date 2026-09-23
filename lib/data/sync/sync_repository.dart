@@ -108,6 +108,15 @@ class SyncRepository {
     );
   }
 
+  /// Updates the payload of a queued item in place (med by [id]).
+  Future<void> updatePayload(String id, Map<String, Object?> payload) async {
+    await (_db.update(
+      _db.syncQueueItems,
+    )..where((tbl) => tbl.id.equals(id))).write(
+      SyncQueueItemsCompanion(payloadJson: Value(_encode(payload))),
+    );
+  }
+
   /// Restores items that were being pushed back to `pending` after a transport
   /// failure so the next sync tick retries them.
   Future<void> markPending(List<String> ids) async {

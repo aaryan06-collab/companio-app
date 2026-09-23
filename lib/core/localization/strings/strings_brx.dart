@@ -305,6 +305,10 @@ const Map<String, String> stringsBrx = {
   L10nKeys.carePerformanceNote:
       'जायारि बेनि बेरायथि बिनि देटानि गेदेरनिफ्राय गिसिम जाबाय जाया।',
   L10nKeys.careUploadPhoto: 'रेवाफो दाव-हाय',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'बारखुनानि रेकर्ड खालाम',
   L10nKeys.careWriteMemory: 'सानग्रा सो',
   L10nKeys.careMemoryTitle: 'मुंनि',

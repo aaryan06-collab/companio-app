@@ -318,6 +318,10 @@ abstract final class L10nKeys {
   static const careAddPatient = 'careAddPatient';
   static const carePerformanceNote = 'carePerformanceNote';
   static const careUploadPhoto = 'careUploadPhoto';
+  static const careChoosePhoto = 'careChoosePhoto';
+  static const careReplacePhoto = 'careReplacePhoto';
+  static const camera = 'camera';
+  static const gallery = 'gallery';
   static const careRecordVoice = 'careRecordVoice';
   static const careWriteMemory = 'careWriteMemory';
   static const careMemoryTitle = 'careMemoryTitle';

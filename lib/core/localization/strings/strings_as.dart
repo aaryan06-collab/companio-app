@@ -304,6 +304,10 @@ const Map<String, String> stringsAs = {
   L10nKeys.carePerformanceNote:
       'শেহতীয়া কাৰ্যকলাপৰ প্ৰদৰ্শন এই ব্যক্তিজনৰ সাধাৰণ স্তৰতকৈ অলপ কম।',
   L10nKeys.careUploadPhoto: 'ফটো আপলোড',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'মাত ৰেকৰ্ড',
   L10nKeys.careWriteMemory: 'স্মৃতি লিখক',
   L10nKeys.careMemoryTitle: 'শিৰোনামা',

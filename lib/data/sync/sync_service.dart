@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import '../local/app_database.dart';
 import '../models/enums.dart';
 import '../repositories/contact_repository.dart';
 import '../repositories/memory_repository.dart';
@@ -167,17 +168,23 @@ class SyncService extends ChangeNotifier {
     required RemoteApplier applier,
     required ConnectivityMonitor monitor,
     Duration retryInterval = const Duration(seconds: 45),
+    Future<String?> Function(String localPath)? mediaUploader,
+    Future<void> Function(String memoryId, String url)? onMemoryUploaded,
   }) : _api = api,
        _queue = queue,
        _applier = applier,
        _monitor = monitor,
-       _retryInterval = retryInterval;
+       _retryInterval = retryInterval,
+       _mediaUploader = mediaUploader,
+       _onMediaUploaded = onMemoryUploaded;
 
   final CompanioApi _api;
   final SyncRepository _queue;
   final RemoteApplier _applier;
   final ConnectivityMonitor _monitor;
   final Duration _retryInterval;
+  final Future<String?> Function(String localPath)? _mediaUploader;
+  final Future<void> Function(String memoryId, String url)? _onMediaUploaded;
 
   SyncSnapshot _snapshot = const SyncSnapshot();
   SyncSnapshot get snapshot => _snapshot;
@@ -248,37 +255,68 @@ class SyncService extends ChangeNotifier {
     final items = await _queue.pending();
     if (items.isEmpty) return;
 
-    final records = items
-        .map(
-          (e) => CompanioRecord.create(
-            entityType: e.entityType,
-            entityId: e.entityId,
-            operation: e.operation,
-            payload: _decode(e.payloadJson),
-            idempotencyKey: e.idempotencyKey,
-            deviceId: _api.deviceId,
-            clientAt: e.createdAt,
-          ),
-        )
-        .toList();
+    // Photo memories are held back until their image file is uploaded: the
+    // uploader gives us the mediaUrl, which is written back into the queued
+    // payload so the pushed record carries it for the receiving device.
+    // Failed uploads stay queued and are retried by the next sync tick.
+    final queuedItems = <SyncQueueItem>[];
+    final records = <CompanioRecord>[];
+    for (final e in items) {
+      final payload = _decode(e.payloadJson);
+      if (e.entityType == 'memory' && _mediaUploader != null) {
+        final path = payload['mediaPath'] as String?;
+        final url = payload['mediaUrl'] as String?;
+        final needsUpload =
+            path != null && path.isNotEmpty && (url == null || url.isEmpty);
+        if (needsUpload) {
+          try {
+            final uploaded = await _mediaUploader(path);
+            if (uploaded == null || uploaded.isEmpty) {
+              await _queue.markFailed(e, 'media upload pending');
+              continue;
+            }
+            payload['mediaUrl'] = uploaded;
+            await _queue.updatePayload(e.id, payload);
+            await _onMediaUploaded?.call(e.entityId, uploaded);
+          } catch (err) {
+            await _queue.markFailed(e, err.toString());
+            continue;
+          }
+        }
+      }
+      queuedItems.add(e);
+      records.add(
+        CompanioRecord.create(
+          entityType: e.entityType,
+          entityId: e.entityId,
+          operation: e.operation,
+          payload: payload,
+          idempotencyKey: e.idempotencyKey,
+          deviceId: _api.deviceId,
+          clientAt: e.createdAt,
+        ),
+      );
+    }
+    if (records.isEmpty) return;
 
-    await _queue.markSyncing(items.map((e) => e.id).toList());
+    final queuedIds = queuedItems.map((e) => e.id).toList();
+    await _queue.markSyncing(queuedIds);
 
     try {
       final accepted = await _api.push(records);
       final syncedIds = <String>[];
-      for (final item in items) {
-        if (accepted.contains(item.idempotencyKey)) {
-          syncedIds.add(item.id);
+      for (var i = 0; i < records.length; i++) {
+        if (accepted.contains(records[i].idempotencyKey)) {
+          syncedIds.add(queuedItems[i].id);
         } else {
-          await _queue.markFailed(item, 'server rejected');
+          await _queue.markFailed(queuedItems[i], 'server rejected');
         }
       }
       await _queue.markSynced(syncedIds);
     } catch (_) {
       // Transport failure (offline, server down): items must stay queued so
       // the next sync tick re-uploads them. Nothing is lost.
-      await _queue.markPending(items.map((e) => e.id).toList());
+      await _queue.markPending(queuedIds);
       rethrow;
     }
   }

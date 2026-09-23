@@ -171,6 +171,8 @@ class AppDependencies {
       queue: syncRepository,
       applier: applier,
       monitor: monitor,
+      mediaUploader: _uploadMemoryPhoto,
+      onMemoryUploaded: (id, url) => memoryRepository.updateMediaUrl(id, url),
     );
 
     dailyExperienceService = DailyExperienceService(
@@ -210,5 +212,21 @@ class AppDependencies {
     if (count.isEmpty) {
       await activityRepository.seedCatalog(language);
     }
+  }
+
+  /// Uploads a picked photo memory to the server and returns its absolute
+  /// media URL. Null when offline or when no server session exists, which
+  /// keeps the photo queued for the next sync retry.
+  Future<String?> _uploadMemoryPhoto(String localPath) async {
+    final session = await serverSessions.load();
+    if (session == null) return null;
+    final deviceId = await loadDeviceId();
+    final path = await serverClient.uploadMemoryPhoto(
+      localPath: localPath,
+      token: session.token,
+      deviceId: deviceId,
+    );
+    if (path == null || path.isEmpty) return null;
+    return serverClient.resolveMediaUrl(path);
   }
 }

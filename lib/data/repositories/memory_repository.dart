@@ -70,6 +70,19 @@ class MemoryRepository {
     return rows.isEmpty ? null : rows.first;
   }
 
+  /// Records the server media URL onto an existing memory once its photo has
+  /// been uploaded (so re-syncs and the patient device carry it).
+  Future<void> updateMediaUrl(String id, String url) async {
+    await (_db.update(
+      _db.memories,
+    )..where((t) => t.id.equals(id))).write(
+      MemoriesCompanion(
+        mediaUrl: Value(url),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
   Future<void> deleteMemory(String id) =>
       (_db.delete(_db.memories)..where((t) => t.id.equals(id))).go();
 

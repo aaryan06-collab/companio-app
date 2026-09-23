@@ -302,6 +302,10 @@ const Map<String, String> stringsMni = {
   L10nKeys.carePerformanceNote:
       'হৌজিক্ খুদোল্লমগি মরুওইবা মফাম অদু মখংন লাগত্মবদা ওইত্তনদা।',
   L10nKeys.careUploadPhoto: 'মফম থেল্লো',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'খোনরল রেকর্ড তৌরু',
   L10nKeys.careWriteMemory: 'নিংথিবা ইরুবী',
   L10nKeys.careMemoryTitle: 'মীমাং',

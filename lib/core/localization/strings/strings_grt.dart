@@ -307,6 +307,10 @@ const Map<String, String> stringsGrt = {
   L10nKeys.carePerformanceNote:
       'Isol mandeni bewal skang jimanio chu·gimik ong·ja; ua somoioni nenhaha.',
   L10nKeys.careUploadPhoto: 'Chibimungko tarina',
+  L10nKeys.careChoosePhoto: 'Choose a photo',
+  L10nKeys.careReplacePhoto: 'Change photo',
+  L10nKeys.camera: 'Camera',
+  L10nKeys.gallery: 'Gallery',
   L10nKeys.careRecordVoice: 'Kuria record kuna',
   L10nKeys.careWriteMemory: 'Gopram sebo',
   L10nKeys.careMemoryTitle: 'Mikrok',
