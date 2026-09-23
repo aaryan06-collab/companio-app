@@ -39,6 +39,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool _busy = false;
   String? _error;
 
+  bool _languageManuallySelected = false;
+
   static const _regions = [
     'assam',
     'meghalaya',
@@ -64,12 +66,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   Future<void> _submit() async {
     final l10n = AppLocalizations.of(context);
+
     final username = _usernameController.text.trim();
     final name = _nameController.text.trim();
     final password = _passwordController.text;
     final confirm = _confirmController.text;
 
     String? invalid;
+
     if (username.length < 3) {
       invalid = l10n.t(L10nKeys.authUsernameShort);
     } else if (!_usernamePattern.hasMatch(username)) {
@@ -81,6 +85,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     } else if (password != confirm) {
       invalid = l10n.t(L10nKeys.authPasswordMismatch);
     }
+
     if (invalid != null) {
       setState(() => _error = invalid);
       return;
@@ -90,8 +95,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       _busy = true;
       _error = null;
     });
+
     try {
       final notifier = ref.read(sessionProvider.notifier);
+
       if (_role == 'caregiver') {
         await notifier.signUpCaregiver(
           username: username,
@@ -101,49 +108,78 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         );
       } else {
         final contacts = <(String, String, String)>[];
+
         final phone = _phoneController.text.trim();
+
         if (phone.isNotEmpty) {
-          contacts.add((name.isEmpty ? 'Family' : 'Family', phone, ''));
+          contacts.add((
+            name.isEmpty ? 'Family' : 'Family',
+            phone,
+            '',
+          ));
         }
+
+        // IMPORTANT:
+        // Read the language directly from the global language provider.
+        // This guarantees that the language selected from the language
+        // picker is the one saved with the patient account.
+        final selectedLanguage = ref.read(appLanguageProvider);
+
         await notifier.signUpPatient(
           username: username,
           password: password,
           name: name,
           region: _region,
-          language: _language,
-          voiceLanguage: voiceLocaleFor(_language),
+          language: selectedLanguage,
+          voiceLanguage: voiceLocaleFor(selectedLanguage),
           contacts: contacts.isEmpty ? null : contacts,
         );
       }
     } on AuthFailure catch (failure) {
       if (mounted) {
         setState(
-          () => _error = AppLocalizations.of(context).t(failure.messageKey),
+          () => _error =
+              AppLocalizations.of(context).t(failure.messageKey),
         );
       }
     } catch (_) {
       if (mounted) {
-        setState(() => _error = AppLocalizations.of(context).t('errorGeneric'));
+        setState(
+          () => _error =
+              AppLocalizations.of(context).t('errorGeneric'),
+        );
       }
     } finally {
-      if (mounted) setState(() => _busy = false);
+      if (mounted) {
+        setState(() => _busy = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen<String>(appLanguageProvider, (prev, next) {
-      if (next != _language) setState(() => _language = next);
+      if (next != _language) {
+        setState(() {
+          _language = next;
+          _languageManuallySelected = true;
+        });
+      }
     });
+
     final l10n = AppLocalizations.of(context);
     final isPatient = _role == 'patient';
+
     return AuthScaffold(
       title: l10n.t(L10nKeys.authSignUpTitle),
       subtitle: l10n.t(L10nKeys.authSignUpBody),
       onBack: widget.onBack,
-      headerActions: [languageButton(context)],
+      headerActions: [
+        languageButton(context),
+      ],
       children: [
         AuthErrorBanner(message: _error),
+
         TextField(
           key: const ValueKey('signup-username'),
           controller: _usernameController,
@@ -153,102 +189,161 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           decoration: InputDecoration(
             labelText: l10n.t(L10nKeys.authUsername),
             hintText: l10n.t(L10nKeys.authUsernameHint),
-            prefixIcon: const Icon(Icons.person_outline_rounded),
+            prefixIcon: const Icon(
+              Icons.person_outline_rounded,
+            ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadii.sm),
+              borderRadius: BorderRadius.circular(
+                AppRadii.sm,
+              ),
             ),
             filled: true,
             fillColor: AppColors.creamCard,
           ),
         ),
+
         const SizedBox(height: AppSpacing.md),
+
         TextField(
           key: const ValueKey('signup-name'),
           controller: _nameController,
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             labelText: l10n.t(L10nKeys.authDisplayName),
-            prefixIcon: const Icon(Icons.badge_outlined),
+            prefixIcon: const Icon(
+              Icons.badge_outlined,
+            ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadii.sm),
+              borderRadius: BorderRadius.circular(
+                AppRadii.sm,
+              ),
             ),
             filled: true,
             fillColor: AppColors.creamCard,
           ),
         ),
+
         const SizedBox(height: AppSpacing.lg),
+
         AuthSectionCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 l10n.t(L10nKeys.authRoleQuestion),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium,
               ),
+
               const SizedBox(height: AppSpacing.sm),
+
               SegmentedButton<String>(
                 segments: [
                   ButtonSegment(
                     value: 'patient',
                     icon: const Text('☀️'),
-                    label: Text(l10n.t(L10nKeys.authRolePatient)),
+                    label: Text(
+                      l10n.t(
+                        L10nKeys.authRolePatient,
+                      ),
+                    ),
                   ),
                   ButtonSegment(
                     value: 'caregiver',
                     icon: const Text('🤝'),
-                    label: Text(l10n.t(L10nKeys.authRoleCaregiver)),
+                    label: Text(
+                      l10n.t(
+                        L10nKeys.authRoleCaregiver,
+                      ),
+                    ),
                   ),
                 ],
                 selected: {_role},
-                onSelectionChanged: (s) => setState(() => _role = s.first),
+                onSelectionChanged: (s) {
+                  setState(() => _role = s.first);
+                },
                 showSelectedIcon: false,
               ),
             ],
           ),
         ),
+
         if (!isPatient) ...[
           TextField(
             key: const ValueKey('signup-pairing'),
             controller: _pairingController,
             autocorrect: false,
             enableSuggestions: false,
-            textCapitalization: TextCapitalization.characters,
+            textCapitalization:
+                TextCapitalization.characters,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-              labelText: l10n.t(L10nKeys.careLinkCode),
-              hintText: l10n.t(L10nKeys.careLinkCodeHint),
-              helperText: l10n.t(L10nKeys.careLinkBody),
-              prefixIcon: const Icon(Icons.tag_rounded),
+              labelText: l10n.t(
+                L10nKeys.careLinkCode,
+              ),
+              hintText: l10n.t(
+                L10nKeys.careLinkCodeHint,
+              ),
+              helperText: l10n.t(
+                L10nKeys.careLinkBody,
+              ),
+              prefixIcon: const Icon(
+                Icons.tag_rounded,
+              ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadii.sm),
+                borderRadius: BorderRadius.circular(
+                  AppRadii.sm,
+                ),
               ),
               filled: true,
               fillColor: AppColors.creamCard,
             ),
           ),
+
           const SizedBox(height: AppSpacing.lg),
         ],
+
         if (isPatient) ...[
           AuthSectionCard(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.t(L10nKeys.onboardingRegionTitle),
-                  style: Theme.of(context).textTheme.titleMedium,
+                  l10n.t(
+                    L10nKeys.onboardingRegionTitle,
+                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium,
                 ),
-                const SizedBox(height: AppSpacing.sm),
+
+                const SizedBox(
+                  height: AppSpacing.sm,
+                ),
+
                 Wrap(
                   spacing: AppSpacing.xs,
                   runSpacing: AppSpacing.xs,
                   children: [
                     for (final region in _regions)
                       ChoiceChip(
-                        label: Text(_regionLabel(region)),
-                        selected: _region == region,
-                        onSelected: (_) => setState(() {
+                        label: Text(
+                          _regionLabel(region),
+                        ),
+                        selected:
+                            _region == region,
+                        onSelected: (_) =>
+                            setState(() {
                           _region = region;
-                          _language = suggestedLanguageForRegion(region);
+
+                          if (!_languageManuallySelected) {
+                            _language =
+                                suggestedLanguageForRegion(
+                              region,
+                            );
+                          }
                         }),
                       ),
                   ],
@@ -256,84 +351,147 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               ],
             ),
           ),
+
           AuthSectionCard(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n.t(L10nKeys.onboardingEmergencyTitle),
-                  style: Theme.of(context).textTheme.titleMedium,
+                  l10n.t(
+                    L10nKeys.onboardingEmergencyTitle,
+                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium,
                 ),
-                const SizedBox(height: AppSpacing.xxs),
+
+                const SizedBox(
+                  height: AppSpacing.xxs,
+                ),
+
                 Text(
-                  l10n.t(L10nKeys.onboardingEmergencyBody),
-                  style: Theme.of(context).textTheme.bodyMedium
-                      ?.copyWith(color: AppColors.inkSoft),
+                  l10n.t(
+                    L10nKeys.onboardingEmergencyBody,
+                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(
+                        color: AppColors.inkSoft,
+                      ),
                 ),
-                const SizedBox(height: AppSpacing.md),
+
+                const SizedBox(
+                  height: AppSpacing.md,
+                ),
+
                 TextField(
-                  key: const ValueKey('signup-phone'),
+                  key: const ValueKey(
+                    'signup-phone',
+                  ),
                   controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.next,
+                  keyboardType:
+                      TextInputType.phone,
+                  textInputAction:
+                      TextInputAction.next,
                   decoration: InputDecoration(
-                    hintText: l10n.t(L10nKeys.careContactPhone),
-                    prefixIcon: const Icon(Icons.phone_outlined),
+                    hintText: l10n.t(
+                      L10nKeys.careContactPhone,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.phone_outlined,
+                    ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadii.sm),
+                      borderRadius:
+                          BorderRadius.circular(
+                        AppRadii.sm,
+                      ),
                     ),
                     filled: true,
-                    fillColor: AppColors.creamCard,
+                    fillColor:
+                        AppColors.creamCard,
                   ),
                 ),
               ],
             ),
           ),
         ],
+
         TextField(
-          key: const ValueKey('signup-password'),
+          key: const ValueKey(
+            'signup-password',
+          ),
           controller: _passwordController,
           obscureText: _obscure,
-          textInputAction: TextInputAction.next,
+          textInputAction:
+              TextInputAction.next,
           decoration: InputDecoration(
-            labelText: l10n.t(L10nKeys.authPassword),
-            hintText: l10n.t(L10nKeys.authPasswordHint),
-            prefixIcon: const Icon(Icons.lock_outline_rounded),
+            labelText: l10n.t(
+              L10nKeys.authPassword,
+            ),
+            hintText: l10n.t(
+              L10nKeys.authPasswordHint,
+            ),
+            prefixIcon: const Icon(
+              Icons.lock_outline_rounded,
+            ),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscure
                     ? Icons.visibility_rounded
                     : Icons.visibility_off_rounded,
               ),
-              onPressed: () => setState(() => _obscure = !_obscure),
+              onPressed: () {
+                setState(
+                  () => _obscure = !_obscure,
+                );
+              },
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadii.sm),
+              borderRadius: BorderRadius.circular(
+                AppRadii.sm,
+              ),
             ),
             filled: true,
             fillColor: AppColors.creamCard,
           ),
         ),
+
         const SizedBox(height: AppSpacing.md),
+
         TextField(
-          key: const ValueKey('signup-confirm'),
+          key: const ValueKey(
+            'signup-confirm',
+          ),
           controller: _confirmController,
           obscureText: _obscure,
-          textInputAction: TextInputAction.done,
+          textInputAction:
+              TextInputAction.done,
           onSubmitted: (_) => _submit(),
           decoration: InputDecoration(
-            labelText: l10n.t(L10nKeys.authConfirmPassword),
-            prefixIcon: const Icon(Icons.lock_rounded),
+            labelText: l10n.t(
+              L10nKeys.authConfirmPassword,
+            ),
+            prefixIcon: const Icon(
+              Icons.lock_rounded,
+            ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadii.sm),
+              borderRadius: BorderRadius.circular(
+                AppRadii.sm,
+              ),
             ),
             filled: true,
             fillColor: AppColors.creamCard,
           ),
         ),
+
         const SizedBox(height: AppSpacing.lg),
+
         AuthSubmitButton(
-          label: l10n.t(L10nKeys.authCreate),
+          label: l10n.t(
+            L10nKeys.authCreate,
+          ),
           icon: Icons.check_rounded,
           busy: _busy,
           onPressed: _submit,
@@ -342,15 +500,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     );
   }
 
-  static String _regionLabel(String region) => switch (region) {
-    'assam' => 'Assam',
-    'meghalaya' => 'Meghalaya',
-    'arunachal' => 'Arunachal',
-    'nagaland' => 'Nagaland',
-    'manipur' => 'Manipur',
-    'mizoram' => 'Mizoram',
-    'tripura' => 'Tripura',
-    'westbengal' => 'West Bengal',
-    _ => 'Other India',
-  };
+  static String _regionLabel(String region) =>
+      switch (region) {
+        'assam' => 'Assam',
+        'meghalaya' => 'Meghalaya',
+        'arunachal' => 'Arunachal',
+        'nagaland' => 'Nagaland',
+        'manipur' => 'Manipur',
+        'mizoram' => 'Mizoram',
+        'tripura' => 'Tripura',
+        'westbengal' => 'West Bengal',
+        _ => 'Other India',
+      };
 }

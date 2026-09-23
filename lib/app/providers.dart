@@ -63,7 +63,12 @@ class SessionNotifier extends AsyncNotifier<AppSession?> {
     if (patient == null) return null;
     final prefs = await _users.preferences(patient.id);
     await _seedFor(patient);
-    ref.read(appLanguageProvider.notifier).set(prefs?.language ?? 'hi');
+
+    // The patient's saved preference is the source of truth.
+    if (prefs != null) {
+      ref.read(appLanguageProvider.notifier).set(prefs.language);
+    }
+
     final session = AppSession(user: user, patient: patient, prefs: prefs);
     _startListening(session);
     return session;
@@ -152,6 +157,7 @@ class SessionNotifier extends AsyncNotifier<AppSession?> {
     }
     await _seedFor(patient);
     ref.read(appLanguageProvider.notifier).set(language);
+    await Future<void>.delayed(Duration.zero);
     _deps.voiceService.init(
       language: voiceLanguage,
       enabled: prefs.speechPrompts,

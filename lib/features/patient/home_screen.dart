@@ -16,14 +16,22 @@ import '../../shared/widgets/splash_screen.dart';
 import 'activity_runner_screen.dart';
 import 'patient_shell.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final Set<String> _completedRoutines = <String>{};
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final home = ref.watch(homeDataProvider);
     final pending = ref.watch(pendingSyncCountProvider).value ?? 0;
+    final reminders = ref.watch(remindersProvider).value ?? const <Reminder>[];
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -36,29 +44,48 @@ class HomeScreen extends ConsumerWidget {
             body: l10n.t('errorGenericBody'),
           ),
           data: (data) => RefreshIndicator(
+            color: AppColors.deepGreen,
+            backgroundColor: AppColors.creamCard,
             onRefresh: () async {
               ref.invalidate(homeDataProvider);
               ref.invalidate(gardenProvider);
+              ref.invalidate(remindersProvider);
             },
             child: ListView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.md,
+                AppSpacing.sm,
+                AppSpacing.md,
+                120,
               ),
               children: [
                 OfflineBanner(pending: pending),
-                const SizedBox(height: AppSpacing.md),
-                _GreetingCard(
+                const SizedBox(height: AppSpacing.sm),
+                _GreetingHero(
                   name: data.profile.displayName,
                   onSettings: () => PatientTabController.of(context)?.value = 4,
                 ),
-                const SizedBox(height: AppSpacing.xl),
-                Text(
-                  l10n.t('homeWhatNeed'),
-                  style: Theme.of(context).textTheme.headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                const SizedBox(height: AppSpacing.lg),
+                _RoutineCheckCard(
+                  reminders: reminders,
+                  completed: _completedRoutines,
+                  onToggle: (id) {
+                    setState(() {
+                      if (!_completedRoutines.add(id)) {
+                        _completedRoutines.remove(id);
+                      }
+                    });
+                  },
+                  onAdd: () => _addRoutine(context),
+                  onDelete: (reminder) => _deleteRoutine(reminder),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.xl),
+                _SectionHeading(
+                  title: l10n.t('homeWhatNeed'),
+                  icon: Icons.auto_awesome_rounded,
+                ),
+                const SizedBox(height: AppSpacing.sm),
                 _LetsPlayCard(
                   onPlay: () => PatientTabController.of(context)?.value = 1,
                 ),
@@ -89,7 +116,7 @@ class HomeScreen extends ConsumerWidget {
                 _ScreeningStatusCard(),
                 const SizedBox(height: AppSpacing.md),
                 _GardenPreviewCard(data: data),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.lg),
               ],
             ),
           ),
@@ -97,10 +124,224 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
+
+  Future<void> _addRoutine(BuildContext context) async {
+    final patientId = ref.read(patientIdProvider);
+    if (patientId == null) return;
+
+    final titleController = TextEditingController();
+    var selectedTime = TimeOfDay.now();
+    var kind = 'routine';
+
+    final added = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.creamCard,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+                ),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                child: SafeArea(
+                  top: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 42,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: AppColors.lineStrong,
+                            borderRadius: BorderRadius.circular(99),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Text(
+                        'Add a routine',
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(
+                              color: AppColors.deepGreenDark,
+                              fontWeight: FontWeight.w800,
+                            ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Create a simple reminder for your day.',
+                        style: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(color: AppColors.inkSoft),
+                      ),
+                      const SizedBox(height: 18),
+                      TextField(
+                        controller: titleController,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: InputDecoration(
+                          labelText: 'Routine name',
+                          hintText: 'e.g. Drink water',
+                          filled: true,
+                          fillColor: AppColors.cream,
+                          prefixIcon: const Icon(Icons.edit_note_rounded),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(18),
+                        onTap: () async {
+                          final picked = await showTimePicker(
+                            context: context,
+                            initialTime: selectedTime,
+                          );
+                          if (picked != null) {
+                            setSheetState(() => selectedTime = picked);
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 15,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.cream,
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.access_time_rounded,
+                                color: AppColors.deepGreen,
+                              ),
+                              const SizedBox(width: 12),
+                              const Expanded(
+                                child: Text(
+                                  'Time',
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                              Text(
+                                selectedTime.format(context),
+                                style: const TextStyle(
+                                  color: AppColors.deepGreen,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 8,
+                        children: [
+                          _RoutineTypeChip(
+                            label: 'Routine',
+                            icon: Icons.check_circle_outline_rounded,
+                            selected: kind == 'routine',
+                            onTap: () => setSheetState(() => kind = 'routine'),
+                          ),
+                          _RoutineTypeChip(
+                            label: 'Medicine',
+                            icon: Icons.medication_outlined,
+                            selected: kind == 'medicine',
+                            onTap: () => setSheetState(() => kind = 'medicine'),
+                          ),
+                          _RoutineTypeChip(
+                            label: 'Water',
+                            icon: Icons.water_drop_outlined,
+                            selected: kind == 'water',
+                            onTap: () => setSheetState(() => kind = 'water'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: AppPrimaryButton(
+                          label: 'Add routine',
+                          icon: Icons.add_rounded,
+                          onPressed: () async {
+                            final title = titleController.text.trim();
+                            if (title.isEmpty) return;
+                            await ref
+                                .read(depsProvider)
+                                .reminderRepository
+                                .addReminder(
+                                  id: 'reminder.${DateTime.now().microsecondsSinceEpoch}',
+                                  patientId: patientId,
+                                  title: title,
+                                  hour: selectedTime.hour,
+                                  minute: selectedTime.minute,
+                                  kind: kind,
+                                );
+                            if (sheetContext.mounted) {
+                              Navigator.of(sheetContext).pop(true);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    titleController.dispose();
+    if (added == true) {
+      ref.invalidate(remindersProvider);
+    }
+  }
+
+  Future<void> _deleteRoutine(Reminder reminder) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.creamCard,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text('Delete routine?'),
+        content: Text('Remove “${reminder.title}” from your routine?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.terracotta,
+            ),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    await ref.read(depsProvider).reminderRepository.deleteReminder(reminder.id);
+    setState(() => _completedRoutines.remove(reminder.id));
+    ref.invalidate(remindersProvider);
+  }
 }
 
-class _GreetingCard extends StatelessWidget {
-  const _GreetingCard({required this.name, this.onSettings});
+class _GreetingHero extends StatelessWidget {
+  const _GreetingHero({required this.name, this.onSettings});
 
   final String name;
   final VoidCallback? onSettings;
@@ -108,48 +349,411 @@ class _GreetingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final key = Greeting.now();
-    return Row(
-      children: [
-        Container(
-          width: 64,
-          height: 64,
-          decoration: const BoxDecoration(
-            color: AppColors.sageMist,
-            shape: BoxShape.circle,
-          ),
-          child: const Center(
-            child: Text('🌸', style: TextStyle(fontSize: 34)),
-          ),
+    final greeting = l10n.t(Greeting.now());
+    final date = MaterialLocalizations.of(context)
+        .formatMediumDate(DateTime.now());
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(22, 20, 16, 20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.sageMist, AppColors.gentleGreen],
         ),
-        const SizedBox(width: AppSpacing.md),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x193F684C),
+            blurRadius: 20,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: .58),
+                        borderRadius: BorderRadius.circular(99),
+                      ),
+                      child: Text(
+                        date,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: AppColors.deepGreenDark,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  '$greeting,',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: AppColors.deepGreenDark,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '$name 🌿',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: AppColors.deepGreenDark,
+                    fontWeight: FontWeight.w900,
+                    height: 1.05,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'A calm little plan for your day.',
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: AppColors.inkSoft),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
             children: [
-              Text(
-                '${l10n.t(key)}, $name 🌿',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: AppColors.deepGreen,
-                  fontWeight: FontWeight.w700,
+              Container(
+                width: 62,
+                height: 62,
+                decoration: BoxDecoration(
+                  color: AppColors.creamCard,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: .7),
+                    width: 3,
+                  ),
+                ),
+                child: const Center(
+                  child: Text('🌸', style: TextStyle(fontSize: 32)),
+                ),
+              ),
+              const SizedBox(height: 8),
+              if (onSettings != null)
+                Material(
+                  color: Colors.white.withValues(alpha: .58),
+                  shape: const CircleBorder(),
+                  child: IconButton(
+                    onPressed: onSettings,
+                    tooltip: 'Settings',
+                    icon: const Icon(Icons.settings_outlined),
+                    color: AppColors.deepGreenDark,
+                    iconSize: 22,
+                    constraints: const BoxConstraints.tightFor(
+                      width: 42,
+                      height: 42,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RoutineCheckCard extends StatelessWidget {
+  const _RoutineCheckCard({
+    required this.reminders,
+    required this.completed,
+    required this.onToggle,
+    required this.onAdd,
+    required this.onDelete,
+  });
+
+  final List<Reminder> reminders;
+  final Set<String> completed;
+  final ValueChanged<String> onToggle;
+  final VoidCallback onAdd;
+  final ValueChanged<Reminder> onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final sorted = [...reminders]
+      ..sort((a, b) {
+        final aMinutes = a.hour * 60 + a.minute;
+        final bMinutes = b.hour * 60 + b.minute;
+        return aMinutes.compareTo(bMinutes);
+      });
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 18, 14, 14),
+      decoration: BoxDecoration(
+        color: AppColors.creamCard,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: AppColors.line),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x123F684C),
+            blurRadius: 18,
+            offset: Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.warmYellowSoft,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(
+                  Icons.checklist_rounded,
+                  color: AppColors.bark,
+                  size: 27,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Routine check',
+                      style: TextStyle(
+                        color: AppColors.deepGreenDark,
+                        fontSize: 19,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      'Small steps for a good day',
+                      style: TextStyle(color: AppColors.inkSoft, fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
+              TextButton.icon(
+                onPressed: onAdd,
+                icon: const Icon(Icons.add_rounded, size: 20),
+                label: const Text('Add'),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.deepGreen,
+                  textStyle: const TextStyle(fontWeight: FontWeight.w800),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 12),
+          if (sorted.isEmpty)
+            InkWell(
+              onTap: onAdd,
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                decoration: BoxDecoration(
+                  color: AppColors.sageMist.withValues(alpha: .55),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Column(
+                  children: [
+                    Icon(
+                      Icons.add_circle_outline_rounded,
+                      color: AppColors.deepGreen,
+                      size: 30,
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Add your first routine',
+                      style: TextStyle(
+                        color: AppColors.deepGreen,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            ...sorted.map(
+              (reminder) => _RoutineRow(
+                reminder: reminder,
+                isDone: completed.contains(reminder.id),
+                onToggle: () => onToggle(reminder.id),
+                onDelete: () => onDelete(reminder),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RoutineRow extends StatelessWidget {
+  const _RoutineRow({
+    required this.reminder,
+    required this.isDone,
+    required this.onToggle,
+    required this.onDelete,
+  });
+
+  final Reminder reminder;
+  final bool isDone;
+  final VoidCallback onToggle;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final icon = switch (reminder.kind) {
+      'medicine' => Icons.medication_outlined,
+      'water' => Icons.water_drop_outlined,
+      _ => Icons.check_circle_outline_rounded,
+    };
+    final time = TimeOfDay(
+      hour: reminder.hour,
+      minute: reminder.minute,
+    ).format(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          color: isDone ? AppColors.successSoft : AppColors.cream,
+          borderRadius: BorderRadius.circular(18),
         ),
-        if (onSettings != null)
-          IconButton(
-            onPressed: onSettings,
-            icon: const Icon(Icons.settings_outlined),
-            color: AppColors.deepGreen,
-            iconSize: 30,
+        child: Row(
+          children: [
+            Checkbox(
+              value: isDone,
+              onChanged: (_) => onToggle(),
+              activeColor: AppColors.deepGreen,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7),
+              ),
+            ),
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: isDone
+                    ? Colors.white.withValues(alpha: .65)
+                    : AppColors.sageMist,
+                borderRadius: BorderRadius.circular(13),
+              ),
+              child: Icon(icon, color: AppColors.deepGreen, size: 22),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    reminder.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColors.ink,
+                      fontWeight: FontWeight.w700,
+                      decoration: isDone ? TextDecoration.lineThrough : null,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    time,
+                    style: const TextStyle(
+                      color: AppColors.inkSoft,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              onPressed: onDelete,
+              tooltip: 'Delete routine',
+              icon: const Icon(Icons.delete_outline_rounded),
+              color: AppColors.terracotta,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RoutineTypeChip extends StatelessWidget {
+  const _RoutineTypeChip({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      selected: selected,
+      onSelected: (_) => onTap(),
+      avatar: Icon(icon, size: 18),
+      label: Text(label),
+      selectedColor: AppColors.sageMist,
+      backgroundColor: AppColors.cream,
+      labelStyle: TextStyle(
+        color: AppColors.deepGreenDark,
+        fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+      ),
+      side: BorderSide(color: selected ? AppColors.deepGreen : AppColors.line),
+    );
+  }
+}
+
+class _SectionHeading extends StatelessWidget {
+  const _SectionHeading({required this.title, required this.icon});
+
+  final String title;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: AppColors.terracotta, size: 22),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: AppColors.deepGreenDark,
+              fontWeight: FontWeight.w800,
+            ),
           ),
+        ),
       ],
     );
   }
 }
 
-/// Big, unmissable "Let's play" call to action on the home screen.
 class _LetsPlayCard extends StatelessWidget {
   const _LetsPlayCard({required this.onPlay});
 
@@ -159,51 +763,72 @@ class _LetsPlayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [AppColors.deepGreen, AppColors.deepGreenDark],
         ),
-        borderRadius: BorderRadius.circular(AppRadii.lg),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x333F684C),
-            blurRadius: 14,
-            offset: Offset(0, 4),
+            color: Color(0x293F684C),
+            blurRadius: 18,
+            offset: Offset(0, 7),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              const Text('🎮', style: TextStyle(fontSize: 34)),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
+          Container(
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: .12),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: const Center(
+              child: Text('🎮', style: TextStyle(fontSize: 30)),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                   l10n.t('homeLetsPlayTitle'),
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            l10n.t('homeLetsPlaySubtitle'),
-            style: Theme.of(context).textTheme.bodyLarge
-                ?.copyWith(color: Colors.white),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          AppPrimaryButton(
-            label: l10n.t('homePlayCta'),
-            icon: Icons.play_arrow_rounded,
-            onPressed: onPlay,
+                const SizedBox(height: 3),
+                Text(
+                  l10n.t('homeLetsPlaySubtitle'),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: Colors.white.withValues(alpha: .86)),
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: FilledButton.icon(
+                    onPressed: onPlay,
+                    icon: const Icon(Icons.play_arrow_rounded),
+                    label: Text(l10n.t('homePlayCta')),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.creamCard,
+                      foregroundColor: AppColors.deepGreenDark,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 12,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -504,21 +1129,39 @@ class _QuickTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadii.md),
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
         decoration: BoxDecoration(
           color: AppColors.creamCard,
-          borderRadius: BorderRadius.circular(AppRadii.md),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: AppColors.line),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0D3F684C),
+              blurRadius: 12,
+              offset: Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 34)),
-            const SizedBox(height: AppSpacing.xs),
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.sageMist,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Center(
+                child: Text(emoji, style: const TextStyle(fontSize: 25)),
+              ),
+            ),
+            const SizedBox(height: 8),
             Text(
               label,
-              style: Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w700),
               textAlign: TextAlign.center,
             ),
           ],
