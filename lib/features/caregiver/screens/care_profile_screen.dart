@@ -229,20 +229,7 @@ class _CareProfileScreenState extends ConsumerState<CareProfileScreen> {
                   l10n.t(L10nKeys.careSettingsTitle),
                   CareRoutes.settings,
                 ),
-                _navRow(
-                  Icons.people_outline_rounded,
-                  l10n.t(L10nKeys.careContacts),
-                  CareRoutes.profile,
-                ),
               ],
-            ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          Center(
-            child: OutlinedButton.icon(
-              onPressed: _confirmLock,
-              icon: const Icon(Icons.lock_outline_rounded),
-              label: Text(l10n.t(L10nKeys.careProfileLogout)),
             ),
           ),
         ],
@@ -310,30 +297,6 @@ class _CareProfileScreenState extends ConsumerState<CareProfileScreen> {
       ref.invalidate(careSubjectProvider);
       ref.invalidate(careProgressProvider);
       _code.clear();
-    }
-  }
-
-  Future<void> _confirmLock() async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.t(L10nKeys.careProfileLogout)),
-        content: Text(l10n.t(L10nKeys.careProfileLogoutConfirm)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(l10n.t(L10nKeys.careCancel)),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(l10n.t(L10nKeys.careProfileLogout)),
-          ),
-        ],
-      ),
-    );
-    if (confirmed == true) {
-      await ref.read(sessionProvider.notifier).lock();
     }
   }
 }

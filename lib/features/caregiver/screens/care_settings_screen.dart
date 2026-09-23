@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app/providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/l10n_keys.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -30,6 +31,27 @@ class CareSettingsScreen extends ConsumerWidget {
           Text(
             l10n.t(L10nKeys.careSettingsTitle),
             style: theme.textTheme.displayMedium,
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          CareCard(
+            child: Center(
+              child: OutlinedButton.icon(
+                onPressed: () => _confirmLogout(context, ref),
+                icon: const Icon(Icons.logout_rounded, color: CareColors.rose),
+                label: Text(
+                  l10n.t(L10nKeys.careProfileLogout),
+                  style: const TextStyle(color: CareColors.rose),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: CareColors.rose,
+                  side: const BorderSide(color: CareColors.rose),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: AppSpacing.lg,
+                  ),
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: AppSpacing.lg),
           CareCard(
@@ -120,6 +142,30 @@ class CareSettingsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _confirmLogout(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.t(L10nKeys.careProfileLogout)),
+        content: Text(l10n.t(L10nKeys.careProfileLogoutConfirm)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.t(L10nKeys.careCancel)),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.t(L10nKeys.careProfileLogout)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await ref.read(sessionProvider.notifier).lock();
+    }
   }
 
   String _fontDescription(int step, AppLocalizations l10n) => switch (step) {
