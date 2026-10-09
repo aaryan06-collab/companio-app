@@ -119,4 +119,29 @@ const Map<String, ActivityContent> extrasBrx = {
     variants: ['🍶 कित्लि', '🪭 फखना', '🧺 खंद्रा', '🍲 कटोरा'],
     hint: 'मोननै जेबा बादियाव सामानखौ खा।',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 गोजौ सेब', right: '🍏 गोथां सेब'),
+      MatchPair(left: '🍋 जम्भेरा', right: '🍊 कमला'),
+      MatchPair(left: '🍇 अंगुर', right: '🫐 ब्लुबेरी'),
+      MatchPair(left: '🥑 एभोकाडो', right: '🥝 कीवी'),
+      MatchPair(left: '🍑 पिच', right: '🍐 नासपाती'),
+    ],
+    hint: 'खंद्रायाव मोनसे फलाय सोलायजाबाय।',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 दिया', right: '🏮 लालटेन'),
+      MatchPair(left: '🌸 गेन्दा फुल', right: '🌷 ट्यूलिप'),
+      MatchPair(left: '✨ जिलिक', right: '🌟 हथे'),
+      MatchPair(left: '🍬 मिठाइ', right: '🍭 ललिपप'),
+    ],
+    hint: 'दिथुङआव मोनसे ल्याम्प सोलायजाबाय।',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'क्रमआ गोनां – सानफोरखौ लागोन।',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'सिगां नुनायखौनिफ्राय सुरु खालाम।',
+  ),
 };

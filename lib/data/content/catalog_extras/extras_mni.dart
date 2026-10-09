@@ -114,4 +114,29 @@ const Map<String, ActivityContent> extrasMni = {
     variants: ['🍶 কেত্লি', '🪭 পন্থনাগী মীরেং', '🧺 খুম্লুম', '🍲 ঠুম'],
     hint: 'অমুক তুম্মা করগা জেরা খোযশিং থোক।',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 অপেল অঙাং', right: '🍏 অপেল অমুবা'),
+      MatchPair(left: '🍋 নিম্বু', right: '🍊 কমলা'),
+      MatchPair(left: '🍇 অঙুর', right: '🫐 ব্লুবেরি'),
+      MatchPair(left: '🥑 অ্যাভোকাডো', right: '🥝 কিউই'),
+      MatchPair(left: '🍑 পীচ', right: '🍐 নাশপাতি'),
+    ],
+    hint: 'বাস্কেটতা হৈ অমা হোংদোকখি।',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 দীয়া', right: '🏮 লণ্ঠন'),
+      MatchPair(left: '🌸 গেন্দা লৈ', right: '🌷 টিউলিপ'),
+      MatchPair(left: '✨ নুংশিৎ', right: '🌟 নগম'),
+      MatchPair(left: '🍬 চেনবা', right: '🍭 ললিপপ'),
+    ],
+    hint: 'শেলফতা ল্যাম্প অমা হোংদোকখি।',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'থৌওং কোংবা লৈ – মৈরাং লৌ।',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'অহানবা উরিবদগী হৌরো।',
+  ),
 };

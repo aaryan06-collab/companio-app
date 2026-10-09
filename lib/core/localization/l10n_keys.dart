@@ -481,6 +481,16 @@ abstract final class L10nKeys {
   static const regionMap = 'regionMap';
   static const regionIndia = 'regionIndia';
   static const regionChoose = 'regionChoose';
+  static const regionAssam = 'regionAssam';
+  static const regionMeghalaya = 'regionMeghalaya';
+  static const regionArunachal = 'regionArunachal';
+  static const regionNagaland = 'regionNagaland';
+  static const regionManipur = 'regionManipur';
+  static const regionMizoram = 'regionMizoram';
+  static const regionTripura = 'regionTripura';
+  static const regionWestBengal = 'regionWestBengal';
+  static const regionOtherIndia = 'regionOtherIndia';
+  static const contactFamily = 'contactFamily';
   static const noVoice = 'noVoice';
   static const optional = 'optional';
 

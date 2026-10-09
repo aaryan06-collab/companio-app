@@ -124,4 +124,29 @@ const Map<String, ActivityContent> extrasNe = {
     variants: ['🍶 केतली', '🪭 हाते पंखा', '🧺 डोको', '🍲 कचौरा'],
     hint: 'उस्तै देखिने दुई वस्तु खोज्नुहोस्।',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 रातो स्याउ', right: '🍏 हरियो स्याउ'),
+      MatchPair(left: '🍋 कागती', right: '🍊 सुन्तला'),
+      MatchPair(left: '🍇 अङ्गुर', right: '🫐 ब्लुबेरी'),
+      MatchPair(left: '🥑 एभोकाडो', right: '🥝 किवी'),
+      MatchPair(left: '🍑 आरु', right: '🍐 नास्पाती'),
+    ],
+    hint: 'झोलाभित्रको एउटा फल फेरिएको छ।',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 दियो', right: '🏮 लालटेन'),
+      MatchPair(left: '🌸 सयपत्री', right: '🌷 ट्युलिप'),
+      MatchPair(left: '✨ चमक', right: '🌟 तारा'),
+      MatchPair(left: '🍬 मिठाई', right: '🍭 लोलीपप'),
+    ],
+    hint: 'दराजमाथिको एउटा दियो फेरिएको छ।',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'क्रम महत्त्वपूर्ण छ – बत्तीहरू पछ्याउनुहोस्।',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'तपाईंले देख्नुभएको पहिलोबाट सुरु गर्नुहोस्।',
+  ),
 };

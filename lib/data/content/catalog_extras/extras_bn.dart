@@ -119,4 +119,29 @@ const Map<String, ActivityContent> extrasBn = {
     variants: ['🍶 কেতলি', '🪭 হাত পাখা', '🧺 ঝুড়ি', '🍲 বাটি'],
     hint: 'ঠিক একই রকমের দুটি জিনিস খুঁজুন।',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 লাল আপেল', right: '🍏 সবুজ আপেল'),
+      MatchPair(left: '🍋 লেবু', right: '🍊 কমলা'),
+      MatchPair(left: '🍇 আঙুর', right: '🫐 ব্লুবেরি'),
+      MatchPair(left: '🥑 অ্যাভোকাডো', right: '🥝 কিউই'),
+      MatchPair(left: '🍑 পীচ', right: '🍐 নাশপাতি'),
+    ],
+    hint: 'ঝুড়িতে একটি ফল বদলে গেছে।',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 প্রদীপ', right: '🏮 লণ্ঠন'),
+      MatchPair(left: '🌸 গাঁদা ফুল', right: '🌷 টিউলিপ'),
+      MatchPair(left: '✨ ঝলক', right: '🌟 তারা'),
+      MatchPair(left: '🍬 মিষ্টি', right: '🍭 ললিপপ'),
+    ],
+    hint: 'শেলফে একটি প্রদীপ বদলে গেছে।',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'ক্রমটা গুরুত্বপূর্ণ – আলোগুলো অনুসরণ করুন।',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'আপনি প্রথমে যা দেখেছিলেন সেখান থেকে শুরু করুন।',
+  ),
 };

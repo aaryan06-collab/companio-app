@@ -127,6 +127,19 @@ class _ActivityRunnerState extends ConsumerState<ActivityRunnerScreen> {
     } catch (_) {}
   }
 
+  /// Resolves the picture for a variant label. Translated variants keep the
+  /// base English labels as their `images` keys, so when a variant has no
+  /// direct entry we fall back to the matching position (variants and images
+  /// are declared in the same order).
+  String? _imageFor(String variant) {
+    final direct = content.images[variant];
+    if (direct != null) return direct;
+    if (content.images.length != content.variants.length) return null;
+    final index = content.variants.indexOf(variant);
+    if (index < 0) return null;
+    return content.images.values.elementAt(index);
+  }
+
   void _showHint() {
     setState(() {
       _hints += 1;
@@ -240,7 +253,7 @@ class _ActivityRunnerState extends ConsumerState<ActivityRunnerScreen> {
             for (final v in sample)
               _MemoryTile(
                 text: v,
-                imagePath: content.images[v],
+                imagePath: _imageFor(v),
                 shown: true,
               ),
           ],
@@ -696,7 +709,7 @@ class _ActivityRunnerState extends ConsumerState<ActivityRunnerScreen> {
             for (var i = 0; i < _pairsDeck.length; i++)
               _MemoryTile(
                 text: _pairsDeck[i],
-                imagePath: content.images[_pairsDeck[i]],
+                imagePath: _imageFor(_pairsDeck[i]),
                 shown:
                     _pairsMemorising ||
                     _pairsMatched.contains(i) ||

@@ -109,4 +109,29 @@ const Map<String, ActivityContent> extrasGu = {
     variants: ['🍶 કીટલી', '🪭 હાથ પંખો', '🧺 ટોપલી', '🍲 વાટકી'],
     hint: 'બરાબર એક જ જેવી બે વસ્તુ શોધો.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 લાલ સેબ', right: '🍏 લીલું સેબ'),
+      MatchPair(left: '🍋 લીંબુ', right: '🍊 નારંગી'),
+      MatchPair(left: '🍇 દ્રાક્ષ', right: '🫐 બ્લૂબેરી'),
+      MatchPair(left: '🥑 એવોકાડો', right: '🥝 કિવી'),
+      MatchPair(left: '🍑 પીચ', right: '🍐 નાસપતી'),
+    ],
+    hint: 'ટોપલીમાં એક ફળ બદલાઈ ગયું છે.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 દીવો', right: '🏮 કંદિલ'),
+      MatchPair(left: '🌸 ગલગોટો', right: '🌷 ટ્યુલિપ'),
+      MatchPair(left: '✨ ચમક', right: '🌟 તારો'),
+      MatchPair(left: '🍬 મીઠાઈ', right: '🍭 લોલીપોપ'),
+    ],
+    hint: 'શેલ્ફ પર એક દીવો બદલાઈ ગયો છે.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'ક્રમ મહત્વનો છે – લાઇટોને અનુસરો.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'તમે પહેલું જોયું તેનાથી શરૂ કરો.',
+  ),
 };

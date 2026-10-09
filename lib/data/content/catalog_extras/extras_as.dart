@@ -114,4 +114,29 @@ const Map<String, ActivityContent> extrasAs = {
     variants: ['🍶 কেটলী', '🪭 হাত পাখা', '🧺 টুকুৰী', '🍲 বাটি'],
     hint: 'একেবাৰে একে দুটা বস্তু বিচাৰক।',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 ৰঙা আপেল', right: '🍏 সেউজীয়া আপেল'),
+      MatchPair(left: '🍋 নেমু', right: '🍊 কমলা'),
+      MatchPair(left: '🍇 আঙুৰ', right: '🫐 ব্লুবেৰী'),
+      MatchPair(left: '🥑 এভোকাডো', right: '🥝 কিউই'),
+      MatchPair(left: '🍑 পিচ', right: '🍐 নাচপতি'),
+    ],
+    hint: 'টুকুৰীত এটা ফল সলনি হৈছে।',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 চাকি', right: '🏮 লণ্ঠন'),
+      MatchPair(left: '🌸 গেন্ধুলি ফুল', right: '🌷 টিউলিপ'),
+      MatchPair(left: '✨ জিলিকনি', right: '🌟 তৰা'),
+      MatchPair(left: '🍬 মিঠাই', right: '🍭 ললিপপ'),
+    ],
+    hint: 'শেল্ফত এটা চাকি সলনি হৈছে।',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'ক্ৰমটো গুৰুত্বপূৰ্ণ – পোহৰবোৰ অনুসৰণ কৰক।',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'আপুনি দেখা প্ৰথমটোৰ পৰা আৰম্ভ কৰক।',
+  ),
 };

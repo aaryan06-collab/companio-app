@@ -290,8 +290,20 @@ void main() {
     const minorityCodes = {'brx', 'kha', 'grt', 'lus', 'mni', 'sat'};
 
     // Festival names are proper nouns identical in every language. 'thermos'
-    // is a trademark rendered identically in Mizo (Latin script).
-    const intentionalLoanBare = {'diwali', 'holi', 'bihu', 'eid', 'thermos'};
+    // is a trademark rendered identically in Mizo (Latin script). The foods
+    // below are loanwords with no native coinage in Khasi/Garo/Mizo.
+    const intentionalLoanBare = {
+      'diwali',
+      'holi',
+      'bihu',
+      'eid',
+      'thermos',
+      'kiwi',
+      'avocado',
+      'diya',
+      'tulip',
+      'lollipop',
+    };
 
     // Strips a leading emoji run (incl. variation selectors / ZWJ) before
     // comparison, so '🥕 Carrot' is read as 'carrot'.

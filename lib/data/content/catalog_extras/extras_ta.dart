@@ -119,4 +119,29 @@ const Map<String, ActivityContent> extrasTa = {
     variants: ['🍶 கெட்டில்', '🪭 கை விசிறி', '🧺 கூடை', '🍲 கிண்ணம்'],
     hint: 'ஒரே மாதிரியான இரண்டு பொருட்களைக் கண்டுபிடியுங்கள்.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 சிவப்பு ஆப்பிள்', right: '🍏 பச்சை ஆப்பிள்'),
+      MatchPair(left: '🍋 எலுமிச்சை', right: '🍊 ஆரஞ்சு'),
+      MatchPair(left: '🍇 திராட்சை', right: '🫐 புளூபெரி'),
+      MatchPair(left: '🥑 அவகாடோ', right: '🥝 கிவி'),
+      MatchPair(left: '🍑 பீச்', right: '🍐 பேரிக்காய்'),
+    ],
+    hint: 'கூடையில் ஒரு பழம் மாறிவிட்டது.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 அகல் விளக்கு', right: '🏮 விளக்கு'),
+      MatchPair(left: '🌸 சாமந்தி', right: '🌷 டூலிப்'),
+      MatchPair(left: '✨ மினுமினுப்பு', right: '🌟 நட்சத்திரம்'),
+      MatchPair(left: '🍬 இனிப்பு', right: '🍭 லாலிபாப்'),
+    ],
+    hint: 'அலமாரியில் ஒரு விளக்கு மாறிவிட்டது.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'வரிசை முக்கியம் – விளக்குகளைப் பின்பற்றுங்கள்.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'நீங்கள் முதலில் பார்த்ததிலிருந்து தொடங்குங்கள்.',
+  ),
 };

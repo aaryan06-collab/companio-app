@@ -114,4 +114,29 @@ const Map<String, ActivityContent> extrasOr = {
     variants: ['🍶 କେତଲୀ', '🪭 ହାତ ପଙ୍ଖା', '🧺 ଟୋକରୀ', '🍲 ବଟା'],
     hint: 'ଠିକ୍ ସମାନ ଦୁଇଟି ଜିନିଷ ଖୋଜ।',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 ଲାଲ ସେଓ', right: '🍏 ସବୁଜ ସେଓ'),
+      MatchPair(left: '🍋 ଲେମ୍ବୁ', right: '🍊 କମଳା'),
+      MatchPair(left: '🍇 ଅଙ୍ଗୁର', right: '🫐 ବ୍ଲୁବେରୀ'),
+      MatchPair(left: '🥑 ଆଭୋକାଡୋ', right: '🥝 କିୱି'),
+      MatchPair(left: '🍑 ପିଚ୍', right: '🍐 ନାସପାତି'),
+    ],
+    hint: 'ଝୁଡ଼ି ଭିତରେ ଗୋଟିଏ ଫଳ ବଦଳିଯାଇଛି।',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 ଦୀପ', right: '🏮 ଲଣ୍ଠନ'),
+      MatchPair(left: '🌸 ଗେଣ୍ଡୁ', right: '🌷 ଟ୍ୟୁଲିପ'),
+      MatchPair(left: '✨ ଚମକ', right: '🌟 ତାରା'),
+      MatchPair(left: '🍬 ମିଠା', right: '🍭 ଲଲିପପ'),
+    ],
+    hint: 'ସେଲ୍ଫ ଉପରେ ଗୋଟିଏ ଦୀପ ବଦଳିଯାଇଛି।',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'କ୍ରମ ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ – ଆଲୋକଗୁଡ଼ିକୁ ଅନୁସରଣ କରନ୍ତୁ।',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'ଆପଣ ପ୍ରଥମେ ଦେଖିଥିବା ଜିନିଷରୁ ଆରମ୍ଭ କରନ୍ତୁ।',
+  ),
 };

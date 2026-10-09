@@ -109,4 +109,29 @@ const Map<String, ActivityContent> extrasUr = {
     variants: ['🍶 کیٹل', '🪭 پنکھا', '🧺 ٹوکری', '🍲 پیالہ'],
     hint: 'بالکل ایک جیسی دو چیزیں ڈھونڈیں۔',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 سرخ سیب', right: '🍏 سبز سیب'),
+      MatchPair(left: '🍋 لیموں', right: '🍊 سنترا'),
+      MatchPair(left: '🍇 انگور', right: '🫐 بلوبیری'),
+      MatchPair(left: '🥑 ایوکاڈو', right: '🥝 کیوی'),
+      MatchPair(left: '🍑 آڑو', right: '🍐 ناشپاتی'),
+    ],
+    hint: 'ٹوکری میں ایک پھل بدل گیا ہے۔',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 دیا', right: '🏮 لالٹین'),
+      MatchPair(left: '🌸 گیندا', right: '🌷 ٹیولپ'),
+      MatchPair(left: '✨ چمک', right: '🌟 ستارہ'),
+      MatchPair(left: '🍬 مٹھائی', right: '🍭 لالی پاپ'),
+    ],
+    hint: 'شیلف پر ایک دیا بدل گیا ہے۔',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'ترتیب اہم ہے – روشنیوں کی پیروی کریں۔',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'جو آپ نے سب سے پہلے دیکھا اسی سے شروع کریں۔',
+  ),
 };

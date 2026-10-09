@@ -119,4 +119,29 @@ const Map<String, ActivityContent> extrasKn = {
     variants: ['🍶 ಕೆಟ್ಲ್', '🪭 ಕೈ ಬೀಸಣಿಗೆ', '🧺 ಬುಟ್ಟಿ', '🍲 ಬಟ್ಟಲು'],
     hint: 'ಒಂದೇ ರೀತಿಯ ಎರಡು ವಸ್ತುಗಳನ್ನು ಹುಡುಕಿ.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 ಕೆಂಪು ಸೇಬು', right: '🍏 ಹಸಿರು ಸೇಬು'),
+      MatchPair(left: '🍋 ನಿಂಬೆ', right: '🍊 ಕಿತ್ತಳೆ'),
+      MatchPair(left: '🍇 ದ್ರಾಕ್ಷಿ', right: '🫐 ಬ್ಲೂಬೆರಿ'),
+      MatchPair(left: '🥑 ಅವಕಾಡೊ', right: '🥝 ಕಿವಿ'),
+      MatchPair(left: '🍑 ಪೀಚ್', right: '🍐 ಪಿಯರ್'),
+    ],
+    hint: 'ಬುಟ್ಟಿಯಲ್ಲಿ ಒಂದು ಹಣ್ಣು ಬದಲಾಗಿದೆ.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 ದೀಪ', right: '🏮 ಲಾಂದ್ರ'),
+      MatchPair(left: '🌸 ಚೆಂಡುಹೂವು', right: '🌷 ಟುಲಿಪ್'),
+      MatchPair(left: '✨ ಹೊಳಪು', right: '🌟 ನಕ್ಷತ್ರ'),
+      MatchPair(left: '🍬 ಸಿಹಿ', right: '🍭 ಲಾಲಿಪಾಪ್'),
+    ],
+    hint: 'ಶೆಲ್ಫ್ನಲ್ಲಿ ಒಂದು ದೀಪ ಬದಲಾಗಿದೆ.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'ಕ್ರಮ ಮುಖ್ಯ – ಬೆಳಕುಗಳನ್ನು ಅನುಸರಿಸಿ.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'ನೀವು ಮೊದಲು ನೋಡಿದ ಒಂದರಿಂದ ಪ್ರಾರಂಭಿಸಿ.',
+  ),
 };

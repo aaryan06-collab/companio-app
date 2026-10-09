@@ -119,4 +119,29 @@ const Map<String, ActivityContent> extrasTe = {
     variants: ['🍶 కెటిల్', '🪭 చేతి విసనకర్ర', '🧺 బుట్ట', '🍲 గిన్నె'],
     hint: 'సరిగ్గా ఒకేలా ఉండే రెండు వస్తువులను కనుగొనండి.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 ఎర్ర ఆపిల్', right: '🍏 పచ్చి ఆపిల్'),
+      MatchPair(left: '🍋 నిమ్మకాయ', right: '🍊 నారింజ'),
+      MatchPair(left: '🍇 ద్రాక్ష', right: '🫐 బ్లూబెరీ'),
+      MatchPair(left: '🥑 అవకాడో', right: '🥝 కివి'),
+      MatchPair(left: '🍑 పీచ్', right: '🍐 బేరి పండు'),
+    ],
+    hint: 'బుట్టలో ఒక పండు మారిపోయింది.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 దీపం', right: '🏮 లాంతరు'),
+      MatchPair(left: '🌸 బంతిపువ్వు', right: '🌷 ట్యులిప్'),
+      MatchPair(left: '✨ మెరుపు', right: '🌟 నక్షత్రం'),
+      MatchPair(left: '🍬 మిఠాయి', right: '🍭 లాలీపాప్'),
+    ],
+    hint: 'అరలో ఒక దీపం మారిపోయింది.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'క్రమం ముఖ్యం – వెలుగులను అనుసరించండి.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'మీరు మొదట చూసిన దాని నుంచి ప్రారంభించండి.',
+  ),
 };

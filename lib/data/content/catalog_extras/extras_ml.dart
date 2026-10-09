@@ -124,4 +124,29 @@ const Map<String, ActivityContent> extrasMl = {
     variants: ['🍶 കെറ്റിൽ', '🪭 കൈവീശൽ', '🧺 കുട്ട', '🍲 പാത്രം'],
     hint: 'ഒരേ പോലെയുള്ള രണ്ട് വസ്തുക്കൾ കണ്ടെത്തുക.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 ചുവന്ന ആപ്പിൾ', right: '🍏 പച്ച ആപ്പിൾ'),
+      MatchPair(left: '🍋 നാരങ്ങ', right: '🍊 ഓറഞ്ച്'),
+      MatchPair(left: '🍇 മുന്തിരി', right: '🫐 ബ്ലൂബെറി'),
+      MatchPair(left: '🥑 അവക്കാഡോ', right: '🥝 കിവി'),
+      MatchPair(left: '🍑 പീച്ച്', right: '🍐 പിയർ'),
+    ],
+    hint: 'കൊട്ടയിലെ ഒരു പഴം മാറിയിരിക്കുന്നു.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 ദീപം', right: '🏮 ലാന്റേൺ'),
+      MatchPair(left: '🌸 ചെണ്ടുമല്ലി', right: '🌷 ട്യൂലിപ്പ്'),
+      MatchPair(left: '✨ തിളക്കം', right: '🌟 നക്ഷത്രം'),
+      MatchPair(left: '🍬 മധുരം', right: '🍭 ലോലിപോപ്പ്'),
+    ],
+    hint: 'ഷെൽഫിലെ ഒരു വിളക്ക് മാറിയിരിക്കുന്നു.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'ക്രമം പ്രധാനം – വെളിച്ചങ്ങൾ പിന്തുടരുക.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'നിങ്ങൾ ആദ്യം കണ്ട ഒന്നിൽ നിന്ന് തുടങ്ങുക.',
+  ),
 };

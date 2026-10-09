@@ -113,7 +113,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
         if (phone.isNotEmpty) {
           contacts.add((
-            name.isEmpty ? 'Family' : 'Family',
+            l10n.t(L10nKeys.contactFamily),
             phone,
             '',
           ));
@@ -330,7 +330,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     for (final region in _regions)
                       ChoiceChip(
                         label: Text(
-                          _regionLabel(region),
+                          l10n.t(regionL10nKey(region)),
                         ),
                         selected:
                             _region == region,
@@ -499,17 +499,4 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       ],
     );
   }
-
-  static String _regionLabel(String region) =>
-      switch (region) {
-        'assam' => 'Assam',
-        'meghalaya' => 'Meghalaya',
-        'arunachal' => 'Arunachal',
-        'nagaland' => 'Nagaland',
-        'manipur' => 'Manipur',
-        'mizoram' => 'Mizoram',
-        'tripura' => 'Tripura',
-        'westbengal' => 'West Bengal',
-        _ => 'Other India',
-      };
 }

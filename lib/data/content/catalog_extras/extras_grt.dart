@@ -114,4 +114,29 @@ const Map<String, ActivityContent> extrasGrt = {
     variants: ['🍶 Ketili', '🪭 Ka·tok', '🧺 Kalga', '🍲 Batai'],
     hint: 'Gipakkobeko gisimko nika.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 Gitchak a-ppel', right: '🍏 Giting a-ppel'),
+      MatchPair(left: '🍋 Naring', right: '🍊 Komila'),
+      MatchPair(left: '🍇 Angur', right: '🫐 Bluberi'),
+      MatchPair(left: '🥑 Avokado', right: '🥝 Kiwi'),
+      MatchPair(left: '🍑 Pich', right: '🍐 Naspati'),
+    ],
+    hint: 'Jakra-o sa pangchak dingtangja·enga.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 Diya', right: '🏮 Lanthen'),
+      MatchPair(left: '🌸 Genda bibal', right: '🌷 Tulip'),
+      MatchPair(left: '✨ Jilika', right: '🌟 A·ske'),
+      MatchPair(left: '🍬 Mithai', right: '🍭 Lolipap'),
+    ],
+    hint: 'Shelf-o sa lamp dingtangja·enga.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'Bak-boan nangan – balrangko ja·rikbo.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'Nang·nikgipa skanggipani a·bachenga.',
+  ),
 };

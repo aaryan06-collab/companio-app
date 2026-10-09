@@ -114,4 +114,29 @@ const Map<String, ActivityContent> extrasSat = {
     variants: ['🍶 বাটা', '🪭 সারা', '🧺 বুর', '🍲 অবাই'],
     hint: 'জোড়া চেতা বস্তু খোজ।',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 लाल सेव', right: '🍏 हरियर सेव'),
+      MatchPair(left: '🍋 नींबू', right: '🍊 कमला'),
+      MatchPair(left: '🍇 अंगूर', right: '🫐 ब्लूबेरी'),
+      MatchPair(left: '🥑 एवोकाडो', right: '🥝 कीवी'),
+      MatchPair(left: '🍑 आड़ू', right: '🍐 नाशपाती'),
+    ],
+    hint: 'टोकरी रे मेटा फल बदल जाना।',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 दिया', right: '🏮 लालटेन'),
+      MatchPair(left: '🌸 गेंदा बाहा', right: '🌷 ट्यूलिप'),
+      MatchPair(left: '✨ झिलिमिल', right: '🌟 इपिल'),
+      MatchPair(left: '🍬 मिठाई', right: '🍭 लॉलीपॉप'),
+    ],
+    hint: 'शेल्फ रे मेटा दिया बदल जाना।',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'क्रम जरूरी आहे – मोस थोयोमे।',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'पेरोड़ नेलकना आरंभ मे।',
+  ),
 };

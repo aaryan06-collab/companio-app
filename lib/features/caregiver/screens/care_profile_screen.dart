@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/localization/l10n_keys.dart';
+import '../../../core/localization/languages.dart';
 import '../../../core/navigation/care_routes.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/caregiver_theme.dart';
@@ -87,7 +88,7 @@ class _CareProfileScreenState extends ConsumerState<CareProfileScreen> {
                         if (subject.patient.region != null &&
                             subject.patient.region!.isNotEmpty)
                           Text(
-                            subject.patient.region!,
+                            l10n.t(regionL10nKey(subject.patient.region!)),
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: CareColors.textSoft,
                             ),

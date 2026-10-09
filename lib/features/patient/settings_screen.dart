@@ -68,7 +68,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         ),
                         if (profile?.region != null)
                           Text(
-                            '📍 ${profile!.region}',
+                            '📍 ${l10n.t(regionL10nKey(profile!.region!))}',
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(color: AppColors.inkSoft),
                           ),

@@ -120,4 +120,29 @@ const Map<String, ActivityContent> extrasLus = {
     variants: ['🍶 Khup', '🪭 Chhuhlungkaih', '🧺 Bu', '🍲 Noi'],
     hint: 'A hmun chan ang tak pair zawng rawh.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 Apple sen', right: '🍏 Apple hring'),
+      MatchPair(left: '🍋 Thei ser', right: '🍊 Suh'),
+      MatchPair(left: '🍇 Thei angur', right: '🫐 Blueberry'),
+      MatchPair(left: '🥑 Avocado', right: '🥝 Kiwi'),
+      MatchPair(left: '🍑 Thei pich', right: '🍐 Thei pear'),
+    ],
+    hint: 'Bawm chhunga thei khat a danglam.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 Diya', right: '🏮 Lalten'),
+      MatchPair(left: '🌸 Par genda', right: '🌷 Tulip'),
+      MatchPair(left: '✨ Eng', right: '🌟 Arfi'),
+      MatchPair(left: '🍬 Thlum', right: '🍭 Lollipop'),
+    ],
+    hint: 'Dawldingah meichher khat a danglam.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'Inthlahdan a pawimawh – engte zui rawh.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'I hmuh hmasa ber atanga tan rawh.',
+  ),
 };

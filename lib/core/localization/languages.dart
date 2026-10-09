@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'l10n_keys.dart';
+
 /// One supported language in Companio.
 class AppLanguage {
   const AppLanguage(this.code, this.nativeName);
@@ -79,6 +81,20 @@ String suggestedLanguageForRegion(String region) => switch (region) {
   'tripura' => 'bn',
   'westbengal' => 'bn',
   _ => 'hi',
+};
+
+/// Localization key for a sign-up region code, so region names render in the
+/// patient's chosen language instead of a raw code or hardcoded English.
+String regionL10nKey(String region) => switch (region) {
+  'assam' => L10nKeys.regionAssam,
+  'meghalaya' => L10nKeys.regionMeghalaya,
+  'arunachal' => L10nKeys.regionArunachal,
+  'nagaland' => L10nKeys.regionNagaland,
+  'manipur' => L10nKeys.regionManipur,
+  'mizoram' => L10nKeys.regionMizoram,
+  'tripura' => L10nKeys.regionTripura,
+  'westbengal' => L10nKeys.regionWestBengal,
+  _ => L10nKeys.regionOtherIndia,
 };
 
 /// Language codes that `flutter_localizations` (GlobalMaterialLocalizations)

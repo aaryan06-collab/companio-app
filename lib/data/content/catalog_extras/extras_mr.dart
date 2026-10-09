@@ -119,4 +119,29 @@ const Map<String, ActivityContent> extrasMr = {
     variants: ['🍶 किटली', '🪭 हात पंखा', '🧺 टोपली', '🍲 वाटी'],
     hint: 'सारख्याच दोन वस्तू शोधा.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 लाल सेब', right: '🍏 हिरवे सेब'),
+      MatchPair(left: '🍋 लिंबू', right: '🍊 संत्रे'),
+      MatchPair(left: '🍇 द्राक्षे', right: '🫐 ब्लूबेरी'),
+      MatchPair(left: '🥑 अवोकाडो', right: '🥝 किवी'),
+      MatchPair(left: '🍑 पीच', right: '🍐 नाशपती'),
+    ],
+    hint: 'टोपलीतील एक फळ बदलले आहे.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 दिवा', right: '🏮 कंदील'),
+      MatchPair(left: '🌸 झेंडूचे फूल', right: '🌷 ट्युलिप'),
+      MatchPair(left: '✨ चमक', right: '🌟 तारा'),
+      MatchPair(left: '🍬 मिठाई', right: '🍭 लॉलीपॉप'),
+    ],
+    hint: 'शेल्फवरील एक दिवा बदलला आहे.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'क्रम महत्त्वाचा – दिव्यांचे अनुसरण करा.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'तुम्ही पाहिलेल्या पहिल्यापासून सुरुवात करा.',
+  ),
 };

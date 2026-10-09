@@ -134,4 +134,29 @@ const Map<String, ActivityContent> extrasKha = {
     variants: ['🍶 Ketill', '🪭 Shurapher', '🧺 Shayong', '🍲 Pyientha'],
     hint: 'Wad ia ka para ha ki jaiñjuh.',
   ),
+  'change_market_basket': ActivityContent(
+    pairs: [
+      MatchPair(left: '🍎 Kteng saw', right: '🍏 Kteng syiar'),
+      MatchPair(left: '🍋 Soh jamir', right: '🍊 Soh tur'),
+      MatchPair(left: '🍇 Soh krai', right: '🫐 Soh bluberi'),
+      MatchPair(left: '🥑 Avokado', right: '🥝 Kiwi'),
+      MatchPair(left: '🍑 Soh pich', right: '🍐 Soh naspati'),
+    ],
+    hint: 'Ka la kylla kawei ka soh ha ka khoh.',
+  ),
+  'change_festival_shelf': ActivityContent(
+    pairs: [
+      MatchPair(left: '🪔 Diya', right: '🏮 Lalten'),
+      MatchPair(left: '🌸 Tiew genda', right: '🌷 Tulip'),
+      MatchPair(left: '✨ Jingshai', right: '🌟 Khlur'),
+      MatchPair(left: '🍬 Jingsweet', right: '🍭 Lollipop'),
+    ],
+    hint: 'Ka la kylla kawei ka lamp ha ka shaphrang.',
+  ),
+  'seq_household_items': ActivityContent(
+    hint: 'Ka jingbeit ka long kaba kongsan – bud ia ki jingshai.',
+  ),
+  'seq_remember_numbers': ActivityContent(
+    hint: 'Sdang na kaba nyngkong phi iohi.',
+  ),
 };
