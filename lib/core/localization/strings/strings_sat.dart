@@ -46,7 +46,7 @@ const Map<String, String> stringsSat = {
   L10nKeys.goodNight: 'रात भले',
 
   L10nKeys.navHome: 'ओराक',
-  L10nKeys.navGarden: 'बगीचा',
+  L10nKeys.navGarden: 'ᱦᱩᱰᱤᱧ ᱡᱤᱛᱠᱟᱹᱨ',
   L10nKeys.navActivities: 'काज कमम',
   L10nKeys.navMemories: 'यादनो',
   L10nKeys.navProfile: 'प्रोफाइल',
@@ -87,7 +87,7 @@ const Map<String, String> stringsSat = {
   L10nKeys.homeFamilyMemoryEmpty: 'ओराक रेव याद ian ठेन दुईटा मनम।',
   L10nKeys.homeSos: 'सहायता दराय',
   L10nKeys.homeSosSubtitle: 'हकातहन रे ओराक रेवलो पुरा',
-  L10nKeys.homeGardenPreview: 'आपंक बगीचा',
+  L10nKeys.homeGardenPreview: 'ᱦᱩᱰᱤᱧ ᱡᱤᱛᱠᱟᱹᱨ',
   L10nKeys.homeEngine: 'माइंडकेयर साथी',
   L10nKeys.homeEngineReady: 'आपंक सहायता तायेब।',
   L10nKeys.homeWelcomeBack: 'सावा गोलो! बगीचा जोहारा आहलन जाओ। 🌸',
@@ -337,6 +337,10 @@ const Map<String, String> stringsSat = {
   L10nKeys.syncSynced: 'जोहारा कद',
   L10nKeys.syncInfo: 'आपंक यादनो जोहारा कद।',
   L10nKeys.syncPending: 'जोहारा दारहाय',
+  L10nKeys.offlineBannerPending:
+      '{count} ᱵᱚᱫᱚᱞ ᱱᱚᱣᱟ ᱯᱷᱚᱱ ᱨᱮ ᱥᱟᱺᱪᱟᱣ ᱟᱠᱟᱱᱟ᱾ ᱡᱚᱲᱟᱣ ᱞᱮᱱ ᱠᱷᱟᱱ ᱥᱤᱝᱠ ᱦᱩᱭᱩᱜᱼᱟ᱾',
+  L10nKeys.offlineBannerOffline:
+      'ᱟᱢ ᱚᱯᱷᱞᱟᱭᱤᱱ ᱨᱮ ᱢᱮᱱᱟᱢᱟ — ᱡᱚᱛᱚ ᱱᱚᱣᱟ ᱯᱷᱚᱱ ᱨᱮ ᱥᱟᱺᱪᱟᱣ ᱟᱠᱟᱱᱟ᱾',
 
   L10nKeys.errorGeneric: 'कनह आले बुरा होद',
   L10nKeys.errorGenericBody: 'आपंक जोहारा दो तायेब। हिलां सिदाम हड़े घाला।',

@@ -47,7 +47,7 @@ const Map<String, String> stringsBrx = {
   L10nKeys.goodNight: 'गोजान होर',
 
   L10nKeys.navHome: 'गोजों',
-  L10nKeys.navGarden: 'बारिखा',
+  L10nKeys.navGarden: 'गुबुन जाफुं',
   L10nKeys.navActivities: 'बेरायथि',
   L10nKeys.navMemories: 'सानग्रा',
   L10nKeys.navProfile: 'प्रोफाइल',
@@ -86,7 +86,7 @@ const Map<String, String> stringsBrx = {
   L10nKeys.homeFamilyMemoryEmpty: 'हागोरिनि सानग्राफोर बेजागायाव नोनो जाबो।',
   L10nKeys.homeSos: 'सहायखौ मोना',
   L10nKeys.homeSosSubtitle: 'हायग्ति-नोनो हागोरिनि जागा-जागा',
-  L10nKeys.homeGardenPreview: 'नुनायनि बारिखा',
+  L10nKeys.homeGardenPreview: 'गुबुन जाफुं',
   L10nKeys.homeEngine: 'माइंडकेयर गाहाय',
   L10nKeys.homeEngineReady: 'नुनायनि मददगिरि साजाबो।',
   L10nKeys.homeWelcomeBack: 'फिननायनि गोजान! बारिखाखौ बिसायनो थां। 🌸',
@@ -352,6 +352,10 @@ const Map<String, String> stringsBrx = {
   L10nKeys.syncSynced: 'सिंक होयबाय',
   L10nKeys.syncInfo: 'नुनायनि खोबोर सिंक होयबाय।',
   L10nKeys.syncPending: 'सिंकनि इयां',
+  L10nKeys.offlineBannerPending:
+      '{count} सोलायनाय बे फनआव थैखो दो। जखै खालामब्ला सिंक जागोन।',
+  L10nKeys.offlineBannerOffline:
+      'नों आफलाइनाव दं — गासैबो बे फनआव थैखो दो।',
 
   L10nKeys.errorGeneric: 'माबो आलु जायगोन',
   L10nKeys.errorGenericBody: 'नुनायनि आगोन-फिन सेफ दो। अनथाइ जोनाब्लाय।',

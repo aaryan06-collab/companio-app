@@ -44,7 +44,7 @@ const Map<String, String> stringsBn = {
   L10nKeys.goodNight: 'শুভ রাত্রি',
 
   L10nKeys.navHome: 'হোম',
-  L10nKeys.navGarden: 'বাগান',
+  L10nKeys.navGarden: 'ছোট জয়',
   L10nKeys.navActivities: 'কার্যকলাপ',
   L10nKeys.navMemories: 'স্মৃতি',
   L10nKeys.navProfile: 'প্রোফাইল',
@@ -84,7 +84,7 @@ const Map<String, String> stringsBn = {
   L10nKeys.homeFamilyMemoryEmpty: 'পরিবারের স্মৃতি এখানে আসতে পারে।',
   L10nKeys.homeSos: 'সাহায্য প্রয়োজন',
   L10nKeys.homeSosSubtitle: 'জরুরি অবস্থায় পরিবারের সঙ্গে যোগাযোগ',
-  L10nKeys.homeGardenPreview: 'আপনার বাগান',
+  L10nKeys.homeGardenPreview: 'ছোট জয়',
   L10nKeys.homeEngine: 'মাইন্ডকেয়ার সঙ্গী',
   L10nKeys.homeEngineReady: 'আপনার সহায়ক প্রস্তুত।',
   L10nKeys.homeWelcomeBack: 'ফিরে আসায় স্বাগতম! বাগান চালিয়ে যান। 🌸',
@@ -351,6 +351,10 @@ const Map<String, String> stringsBn = {
   L10nKeys.syncSynced: 'সিঙ্ক হয়েছে',
   L10nKeys.syncInfo: 'আপনার তথ্য সিঙ্ক হয়েছে।',
   L10nKeys.syncPending: 'সিঙ্কের অপেক্ষায়',
+  L10nKeys.offlineBannerPending:
+      '{count}টি পরিবর্তন এই ফোনে সংরক্ষিত হয়েছে। সংযুক্ত হলে সিঙ্ক হবে।',
+  L10nKeys.offlineBannerOffline:
+      'আপনি অফলাইনে আছেন — সবকিছু এই ফোনে সংরক্ষিত আছে।',
 
   L10nKeys.errorGeneric: 'কিছু ভুল হয়েছে',
   L10nKeys.errorGenericBody:

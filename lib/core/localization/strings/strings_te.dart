@@ -44,7 +44,7 @@ const Map<String, String> stringsTe = {
   L10nKeys.goodNight: 'శుభ రాత్రి',
 
   L10nKeys.navHome: 'హోమ్',
-  L10nKeys.navGarden: 'తోట',
+  L10nKeys.navGarden: 'చిన్న విజయాలు',
   L10nKeys.navActivities: 'కార్యకలాపాలు',
   L10nKeys.navMemories: 'జ్ఞాపకాలు',
   L10nKeys.navProfile: 'ప్రొఫైల్',
@@ -83,7 +83,7 @@ const Map<String, String> stringsTe = {
   L10nKeys.homeFamilyMemoryEmpty: 'కుటుంబ జ్ఞాపకాలు ఇక్కడ కనిపించవచ్చు.',
   L10nKeys.homeSos: 'సహాయం కావాలి',
   L10nKeys.homeSosSubtitle: 'అత్యవసరంలో కుటుంబాన్ని సంప్రదించండి',
-  L10nKeys.homeGardenPreview: 'మీ తోట',
+  L10nKeys.homeGardenPreview: 'చిన్న విజయాలు',
   L10nKeys.homeEngine: 'మైండ్కేర్ తోడు',
   L10nKeys.homeEngineReady: 'మీ సహాయకుడు సిద్ధంగా ఉన్నాడు.',
   L10nKeys.homeWelcomeBack: 'తిరిగి స్వాగతం! తోటను కొనసాగిద్దాం. 🌸',
@@ -351,6 +351,10 @@ const Map<String, String> stringsTe = {
   L10nKeys.syncSynced: 'సమకాలీకరించబడింది',
   L10nKeys.syncInfo: 'మీ సమాచారం సమకాలీకరించబడింది.',
   L10nKeys.syncPending: 'సమకాలీకరణ కోసం వేచి',
+  L10nKeys.offlineBannerPending:
+      '{count} మార్పులు ఈ ఫోన్‌లో సేవ్ చేయబడ్డాయి. కనెక్ట్ అయినప్పుడు సమకాలీకరణ అవుతాయి.',
+  L10nKeys.offlineBannerOffline:
+      'మీరు ఆఫ్‌లైన్‌లో ఉన్నారు — అంతా ఈ ఫోన్‌లో సేవ్ చేయబడింది.',
 
   L10nKeys.errorGeneric: 'ఏదో తప్పు జరిగింది',
   L10nKeys.errorGenericBody: 'మీ పురోగతి సురక్షితం. మళ్ళీ ప్రయత్నించండి.',

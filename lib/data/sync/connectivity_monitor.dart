@@ -36,13 +36,23 @@ class ConnectivityMonitor {
 
   void start() {
     if (_sub != null) return;
-    _sub = _connectivity.onConnectivityChanged.listen((results) {
-      final online = _interpret(results);
-      if (online != _last) {
-        _last = online;
-        _controller?.add(online);
-      }
-    });
+    try {
+      _sub = _connectivity.onConnectivityChanged.listen(
+        (results) {
+          final online = _interpret(results);
+          if (online != _last) {
+            _last = online;
+            _controller?.add(online);
+          }
+        },
+        onError: (_) {
+          // Ignore platform errors; the retry timer still re-checks.
+        },
+      );
+    } catch (_) {
+      // Platform channel unavailable (e.g. tests / unsupported host): keep the
+      // last known state rather than crashing.
+    }
   }
 
   void stop() {

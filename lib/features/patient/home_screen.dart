@@ -44,7 +44,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final home = ref.watch(homeDataProvider);
-    final pending = ref.watch(pendingSyncCountProvider).value ?? 0;
     final remindersAsync = ref.watch(remindersProvider);
     final reminders = remindersAsync.value ?? const <Reminder>[];
 
@@ -75,7 +74,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 120,
               ),
               children: [
-                OfflineBanner(pending: pending),
+                ListenableBuilder(
+                  listenable: ref.watch(depsProvider).syncService,
+                  builder: (context, _) {
+                    final snapshot = ref.read(depsProvider).syncService.snapshot;
+                    return OfflineBanner(
+                      pending: snapshot.pending,
+                      online: snapshot.online,
+                    );
+                  },
+                ),
                 const SizedBox(height: AppSpacing.sm),
                 _GreetingHero(
                   name: data.profile.displayName,

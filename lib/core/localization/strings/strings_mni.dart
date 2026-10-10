@@ -47,7 +47,7 @@ const Map<String, String> stringsMni = {
   L10nKeys.goodNight: 'ফোরৎ জেনা লৈবু',
 
   L10nKeys.navHome: 'যুম',
-  L10nKeys.navGarden: 'লৈঙাক',
+  L10nKeys.navGarden: 'ꯑꯄꯤꯛꯄ ꯃꯥꯏꯄꯥꯛꯄ',
   L10nKeys.navActivities: 'খুদোল্লম',
   L10nKeys.navMemories: 'নিংশিংগি সৌজিন',
   L10nKeys.navProfile: 'প্রোফাইল',
@@ -86,7 +86,7 @@ const Map<String, String> stringsMni = {
   L10nKeys.homeFamilyMemoryEmpty: 'ইমুংগি নিংথিবা সি মসিদা উৎপা য়াই।',
   L10nKeys.homeSos: 'Ei মাতেঙ য়ানবা তাবনি',
   L10nKeys.homeSosSubtitle: 'স্বসংগদবগি ইমুংগি মীয়ামদা মাতেঙ কৌপ',
-  L10nKeys.homeGardenPreview: 'নঙগি লৈঙাক',
+  L10nKeys.homeGardenPreview: 'ꯑꯄꯤꯛꯄ ꯃꯥꯏꯄꯥꯛꯄ',
   L10nKeys.homeEngine: 'মাইন্ডকেয়ার মরূপ',
   L10nKeys.homeEngineReady: 'নঙগি শক্তিমনবগি থম্বা সেম্বি য়াই।',
   L10nKeys.homeWelcomeBack:
@@ -349,6 +349,10 @@ const Map<String, String> stringsMni = {
   L10nKeys.syncSynced: 'অমা অমা থেমখি',
   L10nKeys.syncInfo: 'নঙগি নিংথিবা থেমখি।',
   L10nKeys.syncPending: 'থেমখনবগি তমরি',
+  L10nKeys.offlineBannerPending:
+      '{count} মথংবদা মসি ফোনদা থম্মি। কন্নেক্ত তৌখদা সিংক হয়গনি।',
+  L10nKeys.offlineBannerOffline:
+      'নখোয় অফলাইনদা লৈরি — ঐসুবু মসি ফোনদা থম্মি।',
 
   L10nKeys.errorGeneric: 'করি অমৌতাকনা থেঙখি',
   L10nKeys.errorGenericBody:

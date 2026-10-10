@@ -44,7 +44,7 @@ const Map<String, String> stringsMl = {
   L10nKeys.goodNight: 'ശുഭ രാത്രി',
 
   L10nKeys.navHome: 'ഹോം',
-  L10nKeys.navGarden: 'പൂന്തോട്ടം',
+  L10nKeys.navGarden: 'ചെറിയ വിജയങ്ങൾ',
   L10nKeys.navActivities: 'പ്രവർത്തനങ്ങൾ',
   L10nKeys.navMemories: 'ഓർമ്മകൾ',
   L10nKeys.navProfile: 'പ്രൊഫൈൽ',
@@ -83,7 +83,7 @@ const Map<String, String> stringsMl = {
   L10nKeys.homeFamilyMemoryEmpty: 'കുടുംബത്തിൻ്റെ ഓർമ്മകൾ ഇവിടെ കാണാം.',
   L10nKeys.homeSos: 'സഹായം വേണം',
   L10nKeys.homeSosSubtitle: 'അടിയന്തര ഘട്ടത്തിൽ കുടുംബവുമായി ബന്ധപ്പെടുക',
-  L10nKeys.homeGardenPreview: 'നിങ്ങളുടെ പൂന്തോട്ടം',
+  L10nKeys.homeGardenPreview: 'ചെറിയ വിജയങ്ങൾ',
   L10nKeys.homeEngine: 'മൈൻഡ്കെയർ കൂട്ട്',
   L10nKeys.homeEngineReady: 'നിങ്ങളുടെ സഹായി തയ്യാർ.',
   L10nKeys.homeWelcomeBack: 'തിരിച്ചു വരവ് സ്വാഗതം! പൂന്തോട്ടം തുടരാം. 🌸',
@@ -355,6 +355,10 @@ const Map<String, String> stringsMl = {
   L10nKeys.syncSynced: 'സമന്വയിപ്പിച്ചു',
   L10nKeys.syncInfo: 'നിങ്ങളുടെ വിവരങ്ങൾ സമന്വയിപ്പിച്ചു.',
   L10nKeys.syncPending: 'സമന്വയത്തിനായി കാത്തിരിക്കുന്നു',
+  L10nKeys.offlineBannerPending:
+      '{count} മാറ്റങ്ങൾ ഈ ഫോണിൽ സേവ് ചെയ്തിട്ടുണ്ട്. കണക്ട് ആകുമ്പോൾ സമന്വയിക്കും.',
+  L10nKeys.offlineBannerOffline:
+      'നിങ്ങൾ ഓഫ്‌ലൈനിലാണ് — എല്ലാം ഈ ഫോണിൽ സേവ് ചെയ്തിട്ടുണ്ട്.',
 
   L10nKeys.errorGeneric: 'എന്തോ കുഴപ്പം സംഭവിച്ചു',
   L10nKeys.errorGenericBody:

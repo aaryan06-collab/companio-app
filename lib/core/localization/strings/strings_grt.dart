@@ -46,7 +46,7 @@ const Map<String, String> stringsGrt = {
   L10nKeys.goodNight: 'Simsim nama',
 
   L10nKeys.navHome: 'Nok',
-  L10nKeys.navGarden: 'Bagan',
+  L10nKeys.navGarden: 'Jajong Chon',
   L10nKeys.navActivities: 'Sorkipsa',
   L10nKeys.navMemories: 'Gopramrang',
   L10nKeys.navProfile: 'Profile',
@@ -85,7 +85,7 @@ const Map<String, String> stringsGrt = {
   L10nKeys.homeFamilyMemoryEmpty: 'Nokoniko gopramrang ian man·gen.',
   L10nKeys.homeSos: 'Dakchakaniko nangea',
   L10nKeys.homeSosSubtitle: 'On·pilessaa silgipa manderangko bi·do',
-  L10nKeys.homeGardenPreview: 'Nangni bagan',
+  L10nKeys.homeGardenPreview: 'Jajong Chon',
   L10nKeys.homeEngine: 'Companio watata',
   L10nKeys.homeEngineReady: 'Nangni dakchakgipa sakkim.',
   L10nKeys.homeWelcomeBack: 'Rajden bagan sorkipchina re·ba! 🌸',
@@ -355,6 +355,10 @@ const Map<String, String> stringsGrt = {
   L10nKeys.syncSynced: 'Rikitaaha',
   L10nKeys.syncInfo: 'Nangni gopramrang rikitaaha.',
   L10nKeys.syncPending: 'Rikitanina jangkipenga',
+  L10nKeys.offlineBannerPending:
+      '{count} dingtangani iako ia phone-o don. Connect ongode sync ongen.',
+  L10nKeys.offlineBannerOffline:
+      'Na.a offline-o don — pilak ia phone-o don.',
 
   L10nKeys.errorGeneric: 'Gual aoni ong·aha',
   L10nKeys.errorGenericBody: 'Nangni bewalna darangma jegijako. Susubobo, jej.',

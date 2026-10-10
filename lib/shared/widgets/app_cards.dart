@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/localization/app_localizations.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 
@@ -147,20 +148,19 @@ class StatTile extends StatelessWidget {
 /// Gentle, non-blocking banner shown when the app is offline with pending
 /// changes queued for sync.
 class OfflineBanner extends StatelessWidget {
-  const OfflineBanner({super.key, required this.pending, this.online = false});
+  const OfflineBanner({super.key, required this.pending, this.online = true});
 
   final int pending;
   final bool online;
 
   @override
   Widget build(BuildContext context) {
-    if (online && pending == 0) return const SizedBox.shrink();
+    if (online) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final label = online
-        ? 'Syncing…'
-        : (pending > 0
-              ? '$pending changes saved on this phone. They will sync when connected.'
-              : 'You are offline — everything is saved on this phone.');
+    final label = pending > 0
+        ? l10n.t('offlineBannerPending', {'count': '$pending'})
+        : l10n.t('offlineBannerOffline');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(

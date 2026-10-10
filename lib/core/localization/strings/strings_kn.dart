@@ -44,7 +44,7 @@ const Map<String, String> stringsKn = {
   L10nKeys.goodNight: 'ಶುಭ ರಾತ್ರಿ',
 
   L10nKeys.navHome: 'ಮುಖಪುಟ',
-  L10nKeys.navGarden: 'ತೋಟ',
+  L10nKeys.navGarden: 'ಸಣ್ಣ ಗೆಲುವುಗಳು',
   L10nKeys.navActivities: 'ಚಟುವಟಿಕೆಗಳು',
   L10nKeys.navMemories: 'ನೆನಪುಗಳು',
   L10nKeys.navProfile: 'ಪ್ರೊಫೈಲ್',
@@ -83,7 +83,7 @@ const Map<String, String> stringsKn = {
   L10nKeys.homeFamilyMemoryEmpty: 'ಕುಟುಂಬದ ನೆನಪುಗಳು ಇಲ್ಲಿ ಕಾಣಿಸಬಹುದು.',
   L10nKeys.homeSos: 'ಸಹಾಯ ಬೇಕಿದೆ',
   L10nKeys.homeSosSubtitle: 'ತುರ್ತು ಸಂದರ್ಭದಲ್ಲಿ ಕುಟುಂಬವನ್ನು ಸಂಪರ್ಕಿಸಿ',
-  L10nKeys.homeGardenPreview: 'ನಿಮ್ಮ ತೋಟ',
+  L10nKeys.homeGardenPreview: 'ಸಣ್ಣ ಗೆಲುವುಗಳು',
   L10nKeys.homeEngine: 'ಮೈಂಡ್ಕೇರ್ ಒಡನಾಡಿ',
   L10nKeys.homeEngineReady: 'ನಿಮ್ಮ ಸಹಾಯಕ ಸಿದ್ಧನಿದ್ದಾನೆ.',
   L10nKeys.homeWelcomeBack: 'ಮರಳಿ ಸ್ವಾಗತ! ತೋಟ ಮುಂದುವರಿಸೋಣ. 🌸',
@@ -351,6 +351,10 @@ const Map<String, String> stringsKn = {
   L10nKeys.syncSynced: 'ಸಿಂಕ್ ಆಗಿದೆ',
   L10nKeys.syncInfo: 'ನಿಮ್ಮ ಮಾಹಿತಿ ಸಿಂಕ್ ಆಗಿದೆ.',
   L10nKeys.syncPending: 'ಸಿಂಕ್‌ಗಾಗಿ ಕಾಯುತ್ತಿದೆ',
+  L10nKeys.offlineBannerPending:
+      '{count} ಬದಲಾವಣೆಗಳನ್ನು ಈ ಫೋನ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ. ಸಂಪರ್ಕವಾದಾಗ ಸಿಂಕ್ ಆಗುತ್ತವೆ.',
+  L10nKeys.offlineBannerOffline:
+      'ನೀವು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿದ್ದೀರಿ — ಎಲ್ಲವೂ ಈ ಫೋನ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ.',
 
   L10nKeys.errorGeneric: 'ಏನೋ ತಪ್ಪಾಗಿದೆ',
   L10nKeys.errorGenericBody:

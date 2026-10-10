@@ -44,7 +44,7 @@ const Map<String, String> stringsGu = {
   L10nKeys.goodNight: 'શુભ રાત્રિ',
 
   L10nKeys.navHome: 'ઘર',
-  L10nKeys.navGarden: 'બગીચો',
+  L10nKeys.navGarden: 'નાની જીત',
   L10nKeys.navActivities: 'પ્રવૃત્તિઓ',
   L10nKeys.navMemories: 'સંસ્મરણો',
   L10nKeys.navProfile: 'પ્રોફાઈલ',
@@ -84,7 +84,7 @@ const Map<String, String> stringsGu = {
   L10nKeys.homeFamilyMemoryEmpty: 'પરિવારના સંસ્મરણો અહીં દેખાઈ શકે છે.',
   L10nKeys.homeSos: 'મદદ જોઈએ છે',
   L10nKeys.homeSosSubtitle: 'કટોકટીમાં પરિવારનો સંપર્ક',
-  L10nKeys.homeGardenPreview: 'તમારો બગીચો',
+  L10nKeys.homeGardenPreview: 'નાની જીત',
   L10nKeys.homeEngine: 'માઈન્ડકેર સાથી',
   L10nKeys.homeEngineReady: 'તમારો સહાયક તૈયાર છે.',
   L10nKeys.homeWelcomeBack: 'પાછા આવવા બદલ આભાર! ચાલો બગીચો આગળ વધારીએ. 🌸',
@@ -348,6 +348,10 @@ const Map<String, String> stringsGu = {
   L10nKeys.syncSynced: 'સિંક થયું',
   L10nKeys.syncInfo: 'તમારી માહિતી સિંક થઈ ગઈ છે.',
   L10nKeys.syncPending: 'સિંકની રાહ',
+  L10nKeys.offlineBannerPending:
+      '{count} ફેરફાર આ ફોનમાં સાચવેલા છે. કનેક્ટ થતાં સિંક થશે.',
+  L10nKeys.offlineBannerOffline:
+      'તમે ઑફલાઇન છો — બધું આ ફોનમાં સાચવેલું છે.',
 
   L10nKeys.errorGeneric: 'કંઈક ખોટું થયું',
   L10nKeys.errorGenericBody:

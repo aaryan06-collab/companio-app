@@ -44,7 +44,7 @@ const Map<String, String> stringsAs = {
   L10nKeys.goodNight: 'শুভ ৰাতি',
 
   L10nKeys.navHome: 'হোম',
-  L10nKeys.navGarden: 'বাগিচা',
+  L10nKeys.navGarden: 'সৰু জয়',
   L10nKeys.navActivities: 'কাৰ্যকলাপ',
   L10nKeys.navMemories: 'স্মৃতি',
   L10nKeys.navProfile: 'প্ৰফাইল',
@@ -84,7 +84,7 @@ const Map<String, String> stringsAs = {
   L10nKeys.homeFamilyMemoryEmpty: 'পৰিয়ালৰ স্মৃতি ইয়াত দেখা দিব পাৰে।',
   L10nKeys.homeSos: 'সহায় লাগে',
   L10nKeys.homeSosSubtitle: 'জৰুৰীকালত পৰিয়ালৰ সৈতে যোগাযোগ',
-  L10nKeys.homeGardenPreview: 'আপোনাৰ বাগিচা',
+  L10nKeys.homeGardenPreview: 'সৰু জয়',
   L10nKeys.homeEngine: 'মাইণ্ডকেয়াৰ সংগী',
   L10nKeys.homeEngineReady: 'আপোনাৰ সহায়ক সাজু।',
   L10nKeys.homeWelcomeBack: 'স্বাগতম! বাগিচা আগবঢ়াও আহক। 🌸',
@@ -351,6 +351,10 @@ const Map<String, String> stringsAs = {
   L10nKeys.syncSynced: 'সিংক হৈছে',
   L10nKeys.syncInfo: 'আপোনাৰ তথ্য সিংক হ’ল।',
   L10nKeys.syncPending: 'সিংকৰ অপেক্ষা',
+  L10nKeys.offlineBannerPending:
+      '{count}টা পৰিৱৰ্তন এই ফোনত সংৰক্ষণ কৰা হৈছে। সংযোগ হ’লে ছিংক হ’ব।',
+  L10nKeys.offlineBannerOffline:
+      'আপুনি অফলাইনত আছে — সকলো এই ফোনত সংৰক্ষণ কৰা হৈছে।',
 
   L10nKeys.errorGeneric: 'কিবা এটা সমস্যা হ’ল',
   L10nKeys.errorGenericBody:

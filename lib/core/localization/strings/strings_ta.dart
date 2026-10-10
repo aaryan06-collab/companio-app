@@ -44,7 +44,7 @@ const Map<String, String> stringsTa = {
   L10nKeys.goodNight: 'இனிய இரவு',
 
   L10nKeys.navHome: 'முகப்பு',
-  L10nKeys.navGarden: 'தோட்டம்',
+  L10nKeys.navGarden: 'சிறு வெற்றிகள்',
   L10nKeys.navActivities: 'செயல்பாடுகள்',
   L10nKeys.navMemories: 'நினைவுகள்',
   L10nKeys.navProfile: 'சுயவிவரம்',
@@ -83,7 +83,7 @@ const Map<String, String> stringsTa = {
   L10nKeys.homeFamilyMemoryEmpty: 'குடும்ப நினைவுகள் இங்கே தோன்றலாம்.',
   L10nKeys.homeSos: 'உதவி தேவை',
   L10nKeys.homeSosSubtitle: 'அவசரத்தில் குடும்பத்தைத் தொடர்பு கொள்ளுங்கள்',
-  L10nKeys.homeGardenPreview: 'உங்கள் தோட்டம்',
+  L10nKeys.homeGardenPreview: 'சிறு வெற்றிகள்',
   L10nKeys.homeEngine: 'மைண்ட்கேர் துணை',
   L10nKeys.homeEngineReady: 'உங்கள் உதவியாளர் தயார்.',
   L10nKeys.homeWelcomeBack: 'மீண்டும் வரவேற்கிறோம்! தோட்டத்தை தொடரலாம். 🌸',
@@ -354,6 +354,10 @@ const Map<String, String> stringsTa = {
   L10nKeys.syncSynced: 'ஒத்திசைந்தது',
   L10nKeys.syncInfo: 'உங்கள் தகவல் ஒத்திசைந்து விட்டது.',
   L10nKeys.syncPending: 'ஒத்திசைவு காத்திருக்கிறது',
+  L10nKeys.offlineBannerPending:
+      '{count} மாற்றங்கள் இந்த ஃபோனில் சேமிக்கப்பட்டுள்ளன. இணைந்ததும் ஒத்திசைக்கப்படும்.',
+  L10nKeys.offlineBannerOffline:
+      'நீங்கள் ஆஃப்லைனில் உள்ளீர்கள் — எல்லாம் இந்த ஃபோனில் சேமிக்கப்பட்டுள்ளது.',
 
   L10nKeys.errorGeneric: 'ஏதோ தவறு ஏற்பட்டது',
   L10nKeys.errorGenericBody:

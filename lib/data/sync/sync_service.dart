@@ -205,12 +205,14 @@ class SyncService extends ChangeNotifier {
       }
       notifyListeners();
     });
+    _monitor.start();
     _scheduleRetry();
     syncNow();
   }
 
   void stop() {
     _retryTimer?.cancel();
+    _monitor.stop();
   }
 
   Future<void> setOnline(bool online) async {

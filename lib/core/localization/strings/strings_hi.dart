@@ -44,7 +44,7 @@ const Map<String, String> stringsHi = {
   L10nKeys.goodNight: 'शुभ रात्रि',
 
   L10nKeys.navHome: 'घर',
-  L10nKeys.navGarden: 'बगीचा',
+  L10nKeys.navGarden: 'छोटी जीत',
   L10nKeys.navActivities: 'गतिविधियाँ',
   L10nKeys.navMemories: 'यादें',
   L10nKeys.navProfile: 'प्रोफ़ाइल',
@@ -83,7 +83,7 @@ const Map<String, String> stringsHi = {
   L10nKeys.homeFamilyMemoryEmpty: 'परिवार की यादें यहाँ आ सकती हैं।',
   L10nKeys.homeSos: 'मदद चाहिए',
   L10nKeys.homeSosSubtitle: 'आपातकाल में परिवार से संपर्क करें',
-  L10nKeys.homeGardenPreview: 'आपका बगीचा',
+  L10nKeys.homeGardenPreview: 'छोटी जीत',
   L10nKeys.homeEngine: 'माइंडकेयर साथी',
   L10nKeys.homeEngineReady: 'आपका सहायक तैयार है।',
   L10nKeys.homeWelcomeBack: 'वापसी पर स्वागत! चलिए बगीचा आगे बढ़ाएँ। 🌸',
@@ -348,6 +348,10 @@ const Map<String, String> stringsHi = {
   L10nKeys.syncSynced: 'सिंक हुआ',
   L10nKeys.syncInfo: 'आपकी जानकारी सिंक हो गई है।',
   L10nKeys.syncPending: 'सिंक की प्रतीक्षा में',
+  L10nKeys.offlineBannerPending:
+      '{count} बदलाव इस फ़ोन पर सहेजे गए हैं। कनेक्ट होने पर सिंक हो जाएँगे।',
+  L10nKeys.offlineBannerOffline:
+      'आप ऑफ़लाइन हैं — सब कुछ इस फ़ोन पर सहेजा गया है।',
 
   L10nKeys.errorGeneric: 'कुछ गड़बड़ हुई',
   L10nKeys.errorGenericBody:

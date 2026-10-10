@@ -457,6 +457,8 @@ abstract final class L10nKeys {
   static const syncSynced = 'syncSynced';
   static const syncPending = 'syncPending';
   static const syncInfo = 'syncInfo';
+  static const offlineBannerPending = 'offlineBannerPending';
+  static const offlineBannerOffline = 'offlineBannerOffline';
 
   // Errors
   static const errorGeneric = 'errorGeneric';

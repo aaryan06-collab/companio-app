@@ -47,7 +47,7 @@ const Map<String, String> stringsLus = {
   L10nKeys.goodNight: 'Zan tha',
 
   L10nKeys.navHome: 'In',
-  L10nKeys.navGarden: 'Huan',
+  L10nKeys.navGarden: 'Hnehna Tê',
   L10nKeys.navActivities: 'Sorkip',
   L10nKeys.navMemories: 'Hriatna',
   L10nKeys.navProfile: 'Profile',
@@ -87,7 +87,7 @@ const Map<String, String> stringsLus = {
       'Chhungkua hriatna chu hetah hian a lang ang.',
   L10nKeys.homeSos: 'Tanpuina ka mamawh',
   L10nKeys.homeSosSubtitle: 'Harsatna a chhungkua ko',
-  L10nKeys.homeGardenPreview: 'I huan',
+  L10nKeys.homeGardenPreview: 'Hnehna Tê',
   L10nKeys.homeEngine: 'Companio partner',
   L10nKeys.homeEngineReady: 'I tanpui tu a inpeih e.',
   L10nKeys.homeWelcomeBack: 'Lo kir leh e! I huan chhunzawm ang. 🌸',
@@ -353,6 +353,10 @@ const Map<String, String> stringsLus = {
   L10nKeys.syncSynced: 'A lo infui',
   L10nKeys.syncInfo: 'I hriatna te chu an lo infui.',
   L10nKeys.syncPending: 'Infui ngaitu',
+  L10nKeys.offlineBannerPending:
+      '{count} thlâkthlengna he phone-ah dah a ni. A inzawm hunah a sync ang.',
+  L10nKeys.offlineBannerOffline:
+      'I internet a awm lo — engkim he phone-ah hian dah a ni.',
 
   L10nKeys.errorGeneric: 'Engemaw a dik lo chhuak',
   L10nKeys.errorGenericBody: 'I hna chu him a ni. Chik mapo, jeh.',

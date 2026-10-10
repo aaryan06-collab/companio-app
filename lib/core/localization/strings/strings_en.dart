@@ -44,7 +44,7 @@ const Map<String, String> stringsEn = {
   L10nKeys.goodNight: 'Good night',
 
   L10nKeys.navHome: 'Home',
-  L10nKeys.navGarden: 'Garden',
+  L10nKeys.navGarden: 'Little Wins',
   L10nKeys.navActivities: 'Activities',
   L10nKeys.navMemories: 'Memories',
   L10nKeys.navProfile: 'Profile',
@@ -83,7 +83,7 @@ const Map<String, String> stringsEn = {
   L10nKeys.homeFamilyMemoryEmpty: 'Family memories can appear here.',
   L10nKeys.homeSos: 'Help needed',
   L10nKeys.homeSosSubtitle: 'Contact family in an emergency',
-  L10nKeys.homeGardenPreview: 'Your garden',
+  L10nKeys.homeGardenPreview: 'Little Wins',
   L10nKeys.homeEngine: 'Companio companion',
   L10nKeys.homeEngineReady: 'Your helper is ready.',
   L10nKeys.homeWelcomeBack: 'Welcome back! Let\'s continue your garden. 🌸',
@@ -449,6 +449,10 @@ const Map<String, String> stringsEn = {
   L10nKeys.syncSynced: 'Synchronized',
   L10nKeys.syncInfo: 'Your information has been synchronized.',
   L10nKeys.syncPending: 'Waiting to synchronize',
+  L10nKeys.offlineBannerPending:
+      '{count} changes saved on this phone. They will sync when connected.',
+  L10nKeys.offlineBannerOffline:
+      'You are offline — everything is saved on this phone.',
 
   L10nKeys.errorGeneric: 'Something went wrong',
   L10nKeys.errorGenericBody: 'Your progress is still safe. Please try again.',

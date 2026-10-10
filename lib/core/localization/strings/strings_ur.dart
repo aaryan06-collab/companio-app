@@ -44,7 +44,7 @@ const Map<String, String> stringsUr = {
   L10nKeys.goodNight: 'شب بخیر',
 
   L10nKeys.navHome: 'گھر',
-  L10nKeys.navGarden: 'باغ',
+  L10nKeys.navGarden: 'چھوٹی کامیابیاں',
   L10nKeys.navActivities: 'سرگرمیاں',
   L10nKeys.navMemories: 'یادیں',
   L10nKeys.navProfile: 'پروفائل',
@@ -84,7 +84,7 @@ const Map<String, String> stringsUr = {
   L10nKeys.homeFamilyMemoryEmpty: 'خاندان کی یادیں یہاں دکھ سکتی ہیں۔',
   L10nKeys.homeSos: 'مدد درکار ہے',
   L10nKeys.homeSosSubtitle: 'ہنگامی صورت میں خاندان سے رابطہ',
-  L10nKeys.homeGardenPreview: 'آپ کا باغ',
+  L10nKeys.homeGardenPreview: 'چھوٹی کامیابیاں',
   L10nKeys.homeEngine: 'مائند کیئر ساتھی',
   L10nKeys.homeEngineReady: 'آپ کا معاون تیار ہے۔',
   L10nKeys.homeWelcomeBack: 'واپسی خوش آئند! باغ آگے بڑھائیں۔ 🌸',
@@ -346,6 +346,10 @@ const Map<String, String> stringsUr = {
   L10nKeys.syncSynced: 'مطابقت ہو گئی',
   L10nKeys.syncInfo: 'آپ کی معلومات مطابقت پزیر ہو گئیں۔',
   L10nKeys.syncPending: 'مطابقت کا انتظار',
+  L10nKeys.offlineBannerPending:
+      '{count} تبدیلیاں اس فون پر محفوظ ہیں۔ منسلک ہونے پر سنک ہوں گی۔',
+  L10nKeys.offlineBannerOffline:
+      'آپ آف لائن ہیں — سب کچھ اس فون پر محفوظ ہے۔',
 
   L10nKeys.errorGeneric: 'کچھ غلط ہو گیا',
   L10nKeys.errorGenericBody:

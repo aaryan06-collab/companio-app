@@ -46,7 +46,7 @@ const Map<String, String> stringsKha = {
   L10nKeys.goodNight: 'Miet bha',
 
   L10nKeys.navHome: 'Iing',
-  L10nKeys.navGarden: 'Iing tyngka',
+  L10nKeys.navGarden: 'Jingjop Barit',
   L10nKeys.navActivities: 'Ki jingpyrshang',
   L10nKeys.navMemories: 'Ki jingkynmaw',
   L10nKeys.navProfile: 'Profile',
@@ -85,7 +85,7 @@ const Map<String, String> stringsKha = {
   L10nKeys.homeFamilyMemoryEmpty: 'Ki jingkynmaw na ka iing kin paw hangne.',
   L10nKeys.homeSos: 'Nga donkam jingiarap',
   L10nKeys.homeSosSubtitle: 'Khot ia ki para iing haba don kam',
-  L10nKeys.homeGardenPreview: 'Ka iing tyngka jong phi',
+  L10nKeys.homeGardenPreview: 'Jingjop Barit',
   L10nKeys.homeEngine: 'U para Companio',
   L10nKeys.homeEngineReady: 'U jingiarap jong phi la pynkhreh.',
   L10nKeys.homeWelcomeBack:
@@ -354,6 +354,10 @@ const Map<String, String> stringsKha = {
   L10nKeys.syncSynced: 'La jubab',
   L10nKeys.syncInfo: 'Ka jingkynmaw jong phi la jubab.',
   L10nKeys.syncPending: 'Dang ap ia ka jubab',
+  L10nKeys.offlineBannerPending:
+      '{count} ki jingkylla ki don ha kane ka phone. Kin sync ynda la ktah.',
+  L10nKeys.offlineBannerOffline:
+      'Phi don ha offline — ïeng ïeng baroh ki don ha kane ka phone.',
 
   L10nKeys.errorGeneric: 'Kaei kaei ka la mih ia ka jong ka jinghikai',
   L10nKeys.errorGenericBody:

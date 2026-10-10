@@ -45,7 +45,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   ?.copyWith(color: AppColors.deepGreen),
             ),
             const SizedBox(height: AppSpacing.md),
-            OfflineBanner(pending: pending),
+            ListenableBuilder(
+              listenable: ref.watch(depsProvider).syncService,
+              builder: (context, _) {
+                final snapshot = ref.read(depsProvider).syncService.snapshot;
+                return OfflineBanner(
+                  pending: snapshot.pending,
+                  online: snapshot.online,
+                );
+              },
+            ),
             const SizedBox(height: AppSpacing.md),
             const _ComfortSection(),
             const SizedBox(height: AppSpacing.md),
