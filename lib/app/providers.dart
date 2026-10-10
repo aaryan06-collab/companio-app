@@ -49,7 +49,6 @@ class SessionNotifier extends AsyncNotifier<AppSession?> {
       ref.invalidate(remindersProvider);
       ref.invalidate(homeDataProvider);
       ref.invalidate(gardenProvider);
-      ref.invalidate(pendingSyncCountProvider);
     };
     _deps.voiceService.init(language: 'hi-IN', enabled: false);
     final user = await _users.latestUser();
@@ -679,11 +678,6 @@ final remindersProvider = FutureProvider<List<Reminder>>((ref) async {
   return deps.reminderRepository.remindersFor(patientId);
 });
 
-final pendingSyncCountProvider = FutureProvider<int>((ref) async {
-  final deps = ref.watch(depsProvider);
-  return deps.syncService.snapshot.pending;
-});
-
 /// The most recently created patient — the caregiver's main view subject.
 final carePatientProvider = FutureProvider<PatientProfile?>((ref) async {
   final deps = ref.read(depsProvider);
@@ -1054,6 +1048,5 @@ Future<ActivityCompletionResult> completeActivityFlow(
   ref.invalidate(gardenProvider);
   ref.invalidate(todayActivityProvider);
   ref.invalidate(memoriesProvider);
-  ref.invalidate(pendingSyncCountProvider);
   return outcome;
 }

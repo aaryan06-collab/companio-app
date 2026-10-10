@@ -31,7 +31,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final profile = ref.watch(patientProfileProvider);
-    final pending = ref.watch(pendingSyncCountProvider).value ?? 0;
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -100,7 +99,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: AppSpacing.md),
             const _SosSection(),
             const SizedBox(height: AppSpacing.md),
-            _SyncInfo(pending: pending),
+            ListenableBuilder(
+              listenable: ref.watch(depsProvider).syncService,
+              builder: (context, _) {
+                final snapshot = ref.read(depsProvider).syncService.snapshot;
+                return _SyncInfo(pending: snapshot.pending);
+              },
+            ),
             const SizedBox(height: AppSpacing.xl),
           ],
         ),
